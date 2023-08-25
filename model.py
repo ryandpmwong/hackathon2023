@@ -1,3 +1,4 @@
+import math
 class GameModel:
     """
     Initializes a new game of Werewolf with appropriate number of players
@@ -9,8 +10,17 @@ class GameModel:
     """
 
     def __init__(self, num_players: int, game_mode='text'):
-        self.num_player = num_players
+        self.num_players = num_players
         self.game_mode = game_mode
+        villager_num = math.ceil(num_players / 3.5)
+        werewolf_num = num_players - villager_num
+        self.roles = {'villager' : villager_num, 'werewolf' : werewolf_num})
+        self.players = generate_players(num_players)
+
+    def generate_players(self, amount):
+        for i in range(0,amount):
+            
+
 
 
 class Player:
@@ -21,6 +31,7 @@ class Player:
     """
     def __init__(self, username):
         self.username = username
+        self.alive = True
         pass
 
     def get_username(self):
@@ -28,6 +39,9 @@ class Player:
 
     def get_side(self):
         return None  # might modify later: eg. by default return good
+
+    def is_alive(self):
+        return self.alive
 
 
 class Werewolf(Player):
