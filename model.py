@@ -27,8 +27,17 @@ class GameModel:
 
 
     def generate_players(self, user_list):
-        for user in self.user_list:
-            pass
+        players_info = {}
+        for i in range(0, self.roles['werewolf'])
+            player = random.choice(user_list)
+            while player in players_info:
+                player = random.choice(user_list)
+            players_info[player] = 'werewolf'
+
+        for j in range(0, self.roles['villager']):
+            for player in user_list:
+                if player not in players_info:
+                    players_info[user] = 'villager'
 
 
 class Player:
