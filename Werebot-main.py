@@ -4,11 +4,15 @@ import os
 import discord
 from dotenv import load_dotenv
 
-load_dotenv()
+# Define all our constants here (and only constants!)
+
+
+load_dotenv()  # I think this is better to be put inside main - suggestion by Amy
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 
 client = discord.Client(intents=discord.Intents.default())
+
 
 @client.event
 async def on_ready():
@@ -28,4 +32,13 @@ async def on_ready():
     # members = '\n - '.join([member.name for member in guild.members])
     # print(f'Guild Members:\n - {members}')
 
-client.run(TOKEN)
+
+client.run(TOKEN)  # I think this should also go inside main too - It is better to do it for better debugging.
+
+
+def main():
+    pass
+
+
+if __name__ == '__main__':
+    main()
