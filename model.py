@@ -135,3 +135,15 @@ class Witch(Player):  # or doctor? Whatever name you guys want
 
     def get_potion_status(self):
         return f"poison: {int(self.poison)}, medicine: {int(self.medicine)}"
+
+#was thinking some Round class like this might be useful?
+class Round():
+    def __init__(self):
+        self.attacked = None  # the player that the werewolves choose to kill this round
+        self.protected = None  # the player that the healer guy chooses to save this round
+        
+    def run_night(self):
+        pass
+
+    def run_day(self):
+        pass
