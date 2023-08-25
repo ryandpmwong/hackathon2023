@@ -17,6 +17,9 @@ class GameModel:
 
         self.num_players = num_players
         self.game_mode = game_mode
+
+        #6 to 14 players: 1 doctor, 1 seer, 2 werewolves
+        #if more, math.floor(num_players / 4) werewolves
         self.villager_num = math.ceil(num_players / 3.5)
         self.werewolf_num = num_players - self.villager_num
         self.roles = {'villager': self.villager_num, 'werewolf': self.werewolf_num}
