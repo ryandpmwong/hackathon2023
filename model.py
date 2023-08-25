@@ -40,7 +40,8 @@ class GameModel:
         for j in range(0, self.roles['villager']):
             for player in user_list:
                 if player not in players_info:
-                    players_info[user] = 'villager'
+                    players_info[player] = 'villager'
+        return players_info
 
 
 class Player:
