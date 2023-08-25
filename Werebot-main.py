@@ -94,6 +94,9 @@ def create_game_threads():
     '''for wolf in werewolves:
         werewolves_thread.add_user(wolf)'''
 
+def kill_player(user):
+    user.timeout()
+
 async def main():
     pass
 
