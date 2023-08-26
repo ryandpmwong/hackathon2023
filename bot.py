@@ -23,11 +23,11 @@ class WereWolfBot(commands.Bot):
 
         if message.content == "Make me some threads":
             bot = test_threads(message.channel.id)
-            bot.create_game_threads(message.channel.id)
+            await bot.create_game_threads(message.channel.id)
 
         if message.content == "Delete Werewolf threads":
             bot = test_threads(message.channel.id)
-            bot.delete_game_threads(message.channel.id)
+            await bot.delete_game_threads(message.channel.id)
 
         if message.content == "Hi":
             await message.channel.send("Hello~")

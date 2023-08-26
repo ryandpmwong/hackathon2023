@@ -5,21 +5,21 @@ class test_threads:
         self.werewolves_thread = None
         self.dead_thread = None
 
-    async def create_game_threads(self, channel_id):
+    async def create_game_threads(self, channel_id, bot):
         """When command is triggered
         Store number of running games"""
         game_id = "game1"
         message = "Welcome to Werewolf!"
-        channel = client.get_channel(int(channel_id))
+        channel = bot.get_channel(int(channel_id))
         # create public thread for all players
-        self.all_players_thread = await channel.create_thread(name = game_id+"-everyone", type=ChannelType.private_thread)
+        self.all_players_thread = await channel.create_thread(name = game_id+"-everyone", type=bot.ChannelType.private_thread)
         # create werewolf thread
-        self.werewolves_thread = await channel.create_thread(name = game_id+"-werewolves", type=ChannelType.private_thread)
+        self.werewolves_thread = await channel.create_thread(name = game_id+"-werewolves", type=bot.ChannelType.private_thread)
         # need player list to populate thread
         '''for wolf in werewolves:
             werewolves_thread.add_user(wolf)'''
         # create dead chat
-        self.dead_thread = await channel.create_thread(name = game_id+" dead", type=ChannelType.private_thread)
+        self.dead_thread = await channel.create_thread(name = game_id+" dead", type=bot.ChannelType.private_thread)
 
         # testing, adding myself
         discord_handle = "insomniac.crow"
