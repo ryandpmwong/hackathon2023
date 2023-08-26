@@ -17,7 +17,7 @@ class WereWolfBot(commands.Bot):
         print("Ready")
 
     async def on_message(self, message):
-        if message.author == self.user:
+        if self.user or message.author.bot:
             return
 
         if message.content == "Hi":
@@ -27,7 +27,7 @@ class WereWolfBot(commands.Bot):
             await message.channel.send(f"{message.author} has send a message: {message.content}")
 
     async def on_message_edit(self, before, after):
-        if before.channel.name != 'testing':
+        if before.channel.name != 'testing' or before.author.bot:
             return
         await before.channel.send(
             f"{before.author} edited a message\n"
