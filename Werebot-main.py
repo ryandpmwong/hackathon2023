@@ -87,7 +87,7 @@ def run_werebot():
 
     pass
 
-def create_game_threads():
+async def create_game_threads():
     # when command is trigerred
     # store number of running games
     game_id = "game1"
