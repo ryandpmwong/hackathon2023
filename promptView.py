@@ -61,6 +61,9 @@ async def play(ctx):
     button3 = Button(label="Warning: I'm broken", style=discord.ButtonStyle.red)
 
     async def button1_callback(interaction):
+        #nickname = interaction.response.member.nick()
+        #username = interaction.response.member.user()
+        #await interaction.response.send_message(f"{nickname} ({username}) has clicked a button! Blasphemous!")
         await interaction.response.send_message("You're mean ._.")
 
     button1.callback = button1_callback
