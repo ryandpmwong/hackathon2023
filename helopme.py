@@ -63,24 +63,21 @@ class MakeButtons(commands.Cog):
         self.button_join = Button(label="Join Game", style=discord.ButtonStyle.blurple)
         print(self.button_join)
         self.button_start = Button(label="Start Game", style=discord.ButtonStyle.green, disabled=True)
-        button_cancel = Button(label="Warning: I'm broken, Cancel", style=discord.ButtonStyle.red)
+        self.button_cancel = Button(label="Warning: I'm broken, Cancel", style=discord.ButtonStyle.red)
 
 
         # num of player conditions
         if arg2 is not None:
             if self.valid_player_numbers(int(arg1), int(arg2)):
-                players_joined = 0
-
-                # await ctx.send(str(ctx.author)+" wants to start a game with "+arg1+" players and "+arg2+" werewolves.")
+                self.players_joined = 0
 
                 self.button_join.callback = lambda inter: self.button_join_callback(inter)
-                self.button_start.callback = lambda inter: self.button_start_callback(interaction)
-                self.button_cancel.callback = lambda inter: self.button_boring_callback(interaction)
+                self.button_start.callback = lambda inter: self.button_start_callback(inter)
+                self.button_cancel.callback = lambda inter: self.button_boring_callback(inter)
 
                 self.view.add_item(self.button_join)
                 self.view.add_item(self.button_start)
-                self.view.add_item(button_cancel)
-                # view.remove_item(button)
+                self.view.add_item(self.button_cancel)
 
                 if ctx.author.nick is not None:
                     start_message = await ctx.send(
@@ -109,10 +106,12 @@ class MakeButtons(commands.Cog):
         print(self.players_joined, self.num_players)
         if int(self.players_joined) == int(self.num_players):
             print('Yes')
+
             self.button_start.disabled = False
             print(self.button_join)
             self.button_join.label("I don't know what's going on")
             self.button_join.disabled = True
+            self.reset_view()
 
     async def button_start_callback(self, interaction):
         await interaction.response.send_message(f"Sleep is great for you")
@@ -122,6 +121,7 @@ class MakeButtons(commands.Cog):
 
     async def button_boring_callback(self, interaction):
         await interaction.response.send_message("Oh. You clicked the other button.")
+
 
     def valid_player_numbers(self, total, werewolves):
         good = total - werewolves
