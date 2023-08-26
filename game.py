@@ -42,7 +42,7 @@ class WerewolfGame:
         await thread.remove_user(user)
 
     async def delete(self):
-        async for thread in asyncio.gather(a for a in self.threads.values()):
+        async for thread in asyncio.gather(a for a in self.threads.values()): # need to be modified
             await thread.delete()
 
         self.__del__()
