@@ -48,10 +48,20 @@ async def on_ready():
 
 ########## I'm really sorry I don't know how to use classes and can't run this with them ############
 
-# make the slash command
-@tree.command(name="name", description="description")
-async def slash_command(interaction: discord.Interaction):    
-    await interaction.response.send_message("command")
+@bot.command()
+async def test_play(ctx, arg1 = None, arg2 = None):
+    if arg1.lower() in ["h", "help"]:
+        await ctx.send("Usage: /test_play [total number of players] [number of werewolves]")
+        return
+
+    #num of player conditions
+
+    if arg2 is not None:
+        await ctx.send(str(ctx.author)+" wants to start a game with "+arg1+" players and "+arg2+" werewolves.")
+    elif arg1:
+        await ctx.send(str(ctx.author)+" wants to start a game with "+arg1+" players.")
+    else:
+        await ctx.send("You haven't entered the number of players.")
 
 @bot.command()
 # Make Button?
