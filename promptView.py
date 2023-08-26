@@ -31,12 +31,6 @@ class MakeButtons:
 bot = commands.Bot(command_prefix="/",
                    intents=discord.Intents.all())
 
-"""@bot.command()
-# Make Button?
-async def hello(ctx):
-    classMaybe = """
-
-
 @client.event
 async def on_ready():
     await tree.sync(guild=discord.Object(id=1144540988753326131))
@@ -46,21 +40,31 @@ async def on_ready():
 #    await tree.sync(guild=discord.Object(id=1144540988753326131))
     print("Ready!")
 
-########## I'm really sorry I don't know how to use classes and can't run this with them ############
+# slash commands under here
 
 @bot.command()
 async def bot_help(ctx):
+    """displays a list of available commands to the user"""
     await ctx.send("Here is a list of commands use can use. Type /[command] help for more info."
                    "\n/test_play \n/play \n/game_help")
     
 @bot.command()
+async def skip(ctx):
+    """adds to skip counter, if 75% of players have used /skip then discussion session ends immediately"""
+
+@bot.command()
+async def kill(ctx):
+    """display select menu of villagers here, kill player with majority/most votes when timer is up"""
+
+@bot.command()
 async def game_help(ctx):
-    # show rules of the game
+    "presents the rules of the game"
     # await ctx.send("")
     pass
 
 @bot.command()
 async def test_play(ctx, arg1 = None, arg2 = None):
+
     if arg1.lower() in ["h", "help"]:
         await ctx.send("Usage: /test_play [total number of players] [number of werewolves]")
         return
