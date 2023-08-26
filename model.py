@@ -1,5 +1,5 @@
 import math
-
+import random
 
 class GameModel:
     """
@@ -17,6 +17,9 @@ class GameModel:
 
         self.num_players = num_players
         self.game_mode = game_mode
+
+        #6 to 14 players: 1 doctor, 1 seer, 2 werewolves
+        #if more, math.floor(num_players / 4) werewolves
         self.villager_num = math.ceil(num_players / 3.5)
         self.werewolf_num = num_players - self.villager_num
         self.roles = {'villager': self.villager_num, 'werewolf': self.werewolf_num}
@@ -27,8 +30,18 @@ class GameModel:
 
 
     def generate_players(self, user_list):
-        for user in self.user_list:
-            pass
+        players_info = {}
+        for i in range(0, self.roles['werewolf'])
+            player = random.choice(user_list)
+            while player in players_info:
+                player = random.choice(user_list)
+            players_info[player] = 'werewolf'
+
+        for j in range(0, self.roles['villager']):
+            for player in user_list:
+                if player not in players_info:
+                    players_info[player] = 'villager'
+        return players_info
 
 
 class Player:
@@ -122,3 +135,26 @@ class Witch(Player):  # or doctor? Whatever name you guys want
 
     def get_potion_status(self):
         return f"poison: {int(self.poison)}, medicine: {int(self.medicine)}"
+
+#was thinking some Round class like this might be useful?
+class Round():
+    def __init__(self, players):
+        self.attacked = None  # the player that the werewolves choose to kill this round
+        self.protected = None  # the player that the healer guy chooses to save this round
+        self.players = players
+        
+    def run_night(self):
+        # let the werewolves choose a person to kill
+        #self.attacked = 
+        
+        # witch section
+        '''
+        for player in players:
+            if player.is_alive() and players[player] == 'witch':
+                # let the witch do witch things
+                break
+        '''
+
+    def run_day(self):
+        #discussion and voting stuff
+        pass

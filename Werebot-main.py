@@ -87,8 +87,24 @@ client.run(TOKEN)  # I think this should also go inside run_werebot
 
 
 def run_werebot():
+
     pass
 
+def create_game_threads():
+    # when command is trigerred
+    # store number of running games
+    game_id = "game1"
+    message = "Welcome to Werewolf!"
+    # create public thread for all players
+    all_players_thread = await discord.create_thread(game_id+" everyone", message=message, reason="New Game")
+    # create private thread
+    werewolves_thread = await discord.create_thread(game_id+" werewolves", message=None, reason="New Game")
+    # need player list to populate thread
+    '''for wolf in werewolves:
+        werewolves_thread.add_user(wolf)'''
+
+def kill_player(user):
+    user.timeout()
 
 async def main():
     pass
