@@ -3,6 +3,12 @@ import model
 import asyncio
 
 
+"""
+Inform me on discord when modifying this file OR DDIIIIIE
+(because I have lost all progress due to merge)
+"""
+
+
 class WerewolfGame:
     ID = 0
     GAMES = {}
