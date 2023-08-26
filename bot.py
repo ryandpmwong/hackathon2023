@@ -10,6 +10,8 @@ import model
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
+
+
 class WereWolfBot(commands.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -22,17 +24,17 @@ class WereWolfBot(commands.Bot):
             return
 
         if message.content == "Make me some threads":
-            bot = test_threads(message.channel.id)
-            await bot.create_game_threads(message.channel.id, self)
+            thread_test = test_threads(message.channel, message.author)
+            await thread_test.create_game_threads()
 
         if message.content == "Delete Werewolf threads":
-            bot = test_threads(message.channel.id)
-            await bot.delete_game_threads(message.channel.id)
+            thread_test = test_threads(message.channel, message.author)
+            await thread_test.delete_game_threads(message)
 
         if message.content == "Hi":
             await message.channel.send("Hello~")
         print(message)
-        
+
         if message.channel.name == 'testing' or message.author.bot:
             await message.channel.send(f"{message.author} has send a message: {message.content}")
 
@@ -46,13 +48,9 @@ class WereWolfBot(commands.Bot):
         )
 
 
-
-
-
 bot = WereWolfBot(
     command_prefix='/',
     description="This is the Game werebot",
     intents=discord.Intents.all()
 )
 bot.run(TOKEN)
-
