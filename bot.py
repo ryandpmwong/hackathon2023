@@ -4,6 +4,7 @@ import asyncio
 import discord
 from discord import app_commands
 from discord.ext import commands
+from discord.ui import Button
 from dotenv import load_dotenv
 from makeThreads import test_threads
 import promptView
@@ -55,6 +56,11 @@ class WereWolfBot(commands.Bot):
             f"before message: {before.content}\n"
             f"after message: {after.content}"
         )
+
+    # Button style
+    async def hello(ctx):
+        button = Button(label="Click Me...", style=discord.)
+        await ctx.send("Hi")
 
 
 bot = WereWolfBot(
