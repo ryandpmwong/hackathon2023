@@ -17,7 +17,4 @@ Whether implement by functions or classes: to be discussed
 
 
 def handle_response(message):
-
-
-    p_message = message.strip.lower
-
+    pass

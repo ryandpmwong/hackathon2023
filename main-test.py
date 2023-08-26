@@ -18,7 +18,7 @@ async def main():
     intents = discord.Intents.all()
 
     bot = WereWolfBot(
-        command_prefix="?",
+        command_prefix="/",
         description=description,
         intents=intents
     )
