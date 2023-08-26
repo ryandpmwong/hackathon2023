@@ -6,6 +6,7 @@ from discord import app_commands
 from discord.ext import commands
 from dotenv import load_dotenv
 from makeThreads import test_threads
+import promptView
 
 import model
 
@@ -39,6 +40,9 @@ class WereWolfBot(commands.Bot):
 
         if message.content == "Hi":
             await message.channel.send("Hello~")
+
+        if message.content == "Give me buttons":
+            return
 
         if message.channel.name == 'testing' or message.author.bot:
             await message.channel.send(f"{message.author} has send a message: {message.content}")
