@@ -16,6 +16,7 @@ intents = discord.Intents.all()
 client = discord.Client(intents=intents)
 tree = discord.app_commands.CommandTree(client)
 
+
 # bot = commands.Bot(command_prefix="/", intents=discord.Intents.all())
 # bot = WereWolfBot(command_prefix='/', intents=discord.Intents.all())
 
@@ -31,18 +32,23 @@ class MakeButtons(commands.Cog):
         """
         Makes buttons for voting.
         """
+        pass
 
     @app_commands.command(name='helopme')
     @app_commands.describe(
         arg1='number of players',
         arg2='number of werewolves'
     )
-    async def play_game(self, ctx, arg1: int|None = None, arg2: int|None = None):
+    async def play_game(self, ctx, arg1: str | None = None, arg2: str | None = None):
         """Runs on /test_play [num players] [num werewolf]"""
-        if arg1 != None and arg1.lower() in ["h", "help"]:
-            await ctx.send("Usage: /test_play [total number of players] [number of werewolves]")
+        print('play game')
+        if arg1 == None:
             return
-
+        if arg1.lower() in ["h", "help"]:
+            await ctx.send("Usage: /test_play [total number of players] [number of werewolves]")
+            print('help')
+            return
+        print('outside first if')
         nickname = ctx.author.nick
         username = ctx.author
 
@@ -50,7 +56,7 @@ class MakeButtons(commands.Cog):
             """Prints username/nicknames and a message"""
             nickname = interaction.user.nick
             username = interaction.user
-            if nickname == None:
+            if nickname is None:
                 await interaction.response.send_message(f"{username} has clicked a button! Blasphemous!")
             else:
                 await interaction.response.send_message(f"{nickname} ({username}) has clicked a button! Blasphemous!")
@@ -74,8 +80,11 @@ class MakeButtons(commands.Cog):
         button_start = Button(label="Start Game", style=discord.ButtonStyle.green, disabled=False)
         button3 = Button(label="Warning: I'm broken, Cancel", style=discord.ButtonStyle.red)
 
+        print('set up callback')
+
         # num of player conditions
         if arg2 is not None:
+            print('arg2 is not None')
             if self.valid_player_numbers(int(arg1), int(arg2)):
                 players_joined = 0
 
@@ -103,7 +112,7 @@ class MakeButtons(commands.Cog):
             else:
                 await ctx.send("Too many werewolves. Please enter a lower amount of werewolves.")
 
-        elif arg1:
+        if arg1:
 
             players_joined = 0
 
