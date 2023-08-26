@@ -5,6 +5,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from dotenv import load_dotenv
+from discord import ChannelType
 import responses
 import model
 
@@ -81,18 +82,21 @@ def run_werebot():
 
     pass
 
-def create_game_threads():
+async def create_game_threads(channel_id):
     # when command is trigerred
     # store number of running games
     game_id = "game1"
     message = "Welcome to Werewolf!"
+    channel = client.get_channel(int(channel_id))
     # create public thread for all players
-    all_players_thread = await discord.create_thread(game_id+" everyone", message=message, reason="New Game")
-    # create private thread
-    werewolves_thread = await discord.create_thread(game_id+" werewolves", message=None, reason="New Game")
+    all_players_thread = await channel.create_thread(name = game_id+" everyone", type=ChannelType.private_thread)
+    # create werewolf thread
+    werewolves_thread = await channel.create_thread(name = game_id+" werewolves", type=ChannelType.private_thread)
     # need player list to populate thread
     '''for wolf in werewolves:
         werewolves_thread.add_user(wolf)'''
+    # create dead chat
+    dead_thread = await channel.create_thread(name = game_id+" dead", type=ChannelType.private_thread)
 
 def kill_player(user):
     user.timeout()
