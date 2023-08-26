@@ -18,25 +18,27 @@ GUILD = os.getenv('DISCORD_GUILD')
 client = discord.Client(intents=discord.Intents.default())  # can this go into run_werebot function?
 
 
-class WereWolfGame(commands.Cog):
-    def __init__(self, bot, players: list, game_mode='text'):
-        self.bot = bot
-        self.player = players
-        self.game_model = model.GameModel(len(players), game_mode)
+class WereWolfBot(discord.Client):
+    pass
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #
+    # async def on_ready(self):
+    #     for guild in client.guilds:
+    #         if guild.name == GUILD:
+    #             break
+    #
+    #     print(
+    #         f'{client.user} is connected to the following guild:\n'
+    #         f'{guild.name}(id: {guild.id})'
+    #     )
+    #
+    #     print("Guild members:")
+    #     for member in guild.members:
+    #         print(f"- {member.name}\n")
 
-    @app_commands.command()  #apparently this will enable to show us command in discord
-    @app_commands.describe(
-        number_of_people="The number of people in the game",
-        game_mode="Game mode, can be voice or text"
-    )
-    async def werewolfgame(self, interation: discord.Interaction, number_of_people: int = 5, game_mode: str = 'text'):
-        """
-        Starts a game of werewolf
-        :param interation:
-        :param number_of_people:
-        :param game_mode:
-        :return:
-        """
+
+
 
 
 """
@@ -44,11 +46,6 @@ It is best to separate computational functions (with regular def) from async fun
 call the regular functions.
 regular function goes below:
 """
-
-
-
-
-
 
 """
 Async functions:
