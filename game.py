@@ -75,17 +75,27 @@ class WerewolfGame:
         self.werewolf_num = len(users) - math.ceil(len(users) / 3.5)
         werewolves = sample(users, self.villager_num)
         for wolf in werewolves:
-            await self.allocate_role(wolf, self.threads[1])
+            await self.allocate_role(wolf, self.threads[1], 'werewolf')
         for user in users:
             if user not in werewolves:
-                await self.allocate_role(user, self.threads[0])
+                await self.allocate_role(user, self.threads[0], 'villager')
 
 
     async def get_threads(self):
         return self.threads.values()
 
-    async def allocate_role(self, user, thread: discord.Thread):
-        self.threads[thread].append(model.Player(user))
+    async def allocate_role(self, user, thread: discord.Thread, player_type: str):
+        """
+        Initialize player object for each user based on the type and allocate them into correct threads
+        :param user:
+        :param thread:
+        :param player_type:
+        :return:
+        """
+        if player_type == 'villager':
+            self.threads[thread].append(model.Villager(user))
+        elif player_type == 'werewolf':
+            self.threads[thread].append(model.Werewolf(user))
         await thread.add_user(user)
 
     async def deallocate_role(self, user, thread: discord.Thread):
