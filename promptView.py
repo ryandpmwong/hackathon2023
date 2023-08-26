@@ -55,13 +55,24 @@ async def test_play(ctx, arg1 = None, arg2 = None):
         return
 
     #num of player conditions
-
     if arg2 is not None:
-        await ctx.send(str(ctx.author)+" wants to start a game with "+arg1+" players and "+arg2+" werewolves.")
+        if valid_player_numbers(int(arg1), int(arg2)):
+            await ctx.send(str(ctx.author)+" wants to start a game with "+arg1+" players and "+arg2+" werewolves.")
+        else:
+           await ctx.send("Too many werewolves.")
     elif arg1:
         await ctx.send(str(ctx.author)+" wants to start a game with "+arg1+" players.")
     else:
         await ctx.send("You haven't entered the number of players.")
+    
+# function to manage player number check
+def valid_player_numbers(total, werewolves):
+    good = total - werewolves
+    if werewolves>= good:
+        return False
+    else:
+        return True
+
 
 @bot.command()
 # Make Button?
