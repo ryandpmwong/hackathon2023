@@ -117,7 +117,7 @@ client.run(TOKEN)  # I think this should also go inside run_werebot
 
 
 def run_werebot():
-
+    
     pass
 
 def kill_player(user):
