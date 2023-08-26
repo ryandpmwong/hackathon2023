@@ -77,12 +77,12 @@ def valid_player_numbers(total, werewolves):
 @bot.command()
 # Make Button?
 async def play(ctx):
-    button1 = Button(label="Don't click me ;_;", style=discord.ButtonStyle.blurple)
-    button2 = Button(label="I would ask you to start the game.", style=discord.ButtonStyle.green)
-    button3 = Button(label="Warning: I'm broken", style=discord.ButtonStyle.red)
+    button_join = Button(label="Join Game", style=discord.ButtonStyle.blurple)
+    button_start = Button(label="Start Game", style=discord.ButtonStyle.green, disabled=True)
+    button3 = Button(label="Warning: I'm broken, Cancel", style=discord.ButtonStyle.red)
     players_joined = 0
 
-    async def button1_callback(interaction):
+    async def button_join_callback(interaction):
         nickname = interaction.user.nick
         username = interaction.user
         if nickname == None:
@@ -94,7 +94,7 @@ async def play(ctx):
         message = await interaction.original_response()
         await message.edit(f"New or old message?")
 
-    async def button2_callback(interaction):
+    async def button_start_callback(interaction):
         message = await interaction.original_response()
         print(message)
         await interaction.edit_original_response("New or old message first method?")
@@ -103,13 +103,13 @@ async def play(ctx):
     async def button_boring_callback(interaction):
         await interaction.response.send_message("Oh. You clicked the other button.")
 
-    button1.callback = button1_callback
-    button2.callback = button2_callback
+    button_join.callback = button_join_callback
+    button_start.callback = button_start_callback
     button3.callback = button_boring_callback
 
     view = View()
-    view.add_item(button1)
-    view.add_item(button2)
+    view.add_item(button_join)
+    view.add_item(button_start)
     view.add_item(button3)
     #view.remove_item(button)
     start_message = await ctx.send(f"Username of some sort has started a game! 🐺\n {players_joined}/666 players joined", view=view)
