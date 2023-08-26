@@ -37,6 +37,9 @@ class WereWolfBot(commands.Bot):
             # add function to ask for player usernames later.
             self.game_dict[new_game.ID] = new_game
 
+        if message.content == "Remove player":
+            await self.game_dict[0].deallocate_role(message.author, self.game_dict[0].threads['villager'])
+
         elif message.content == "Delete Werewolf threads":
             pass
 

@@ -38,11 +38,11 @@ class WerewolfGame:
         self.player_list.append(model.Player(user))
         await thread.add_user(user)
 
-    async def deallocate_role(self):
-        pass
+    async def deallocate_role(self, user, thread:discord.Thread):
+        await thread.remove_user(user)
 
     async def delete(self):
-        async for thread in asyncio.gather(a for a in self.threads.values()):
+        async for thread in asyncio.gather(a for a in self.threads.values()): # need to be modified
             await thread.delete()
 
         self.__del__()
