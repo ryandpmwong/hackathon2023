@@ -80,14 +80,20 @@ async def play(ctx):
             await interaction.response.send_message(f"{nickname} ({username}) has clicked a button! Blasphemous!")
         #players_joined += 1
         #print(players_joined)
-        #message = await interaction.original_response()
-        #await message.edit(f"Username of some sort has started a game! 🐺\n {players_joined}/666 players joined", view=view)
+        message = await interaction.original_response()
+        await message.edit(f"New or old message?")
+
+    async def button2_callback(interaction):
+        message = await interaction.original_response()
+        print(message)
+        await interaction.edit_original_response("New or old message first method?")
+        await message.edit("New or old message?")
 
     async def button_boring_callback(interaction):
-        await interaction.response.send_message("Oh. You clicked one of the other two buttons.")
+        await interaction.response.send_message("Oh. You clicked the other button.")
 
     button1.callback = button1_callback
-    button2.callback = button_boring_callback
+    button2.callback = button2_callback
     button3.callback = button_boring_callback
 
     view = View()
