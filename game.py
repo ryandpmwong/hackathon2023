@@ -13,43 +13,42 @@ class WerewolfGame:
         self.player_list = []
         self.ID = WerewolfGame.ID
         WerewolfGame.ID += 1
-        self.threads = {'village': None, 'werewolf': None,
-                        'ghost': None}  # contain tread in the order: [village_thread, werewolf_thread, ghost_thread. Use for del
-        asyncio.run(self.create_game_threads())
+        self.threads = {'villager': None, 'werewolf': None,
+                        'ghost': None}
 
     async def create_game_threads(self):
         """When command is triggered
         Store number of running games"""
-        game_id = "Game 1: "
+        game_id = f"Game {self.ID}: "
         message = "Welcome to Werewolf!"
-
-        # create public thread for all players
+        print(message) #tr
         self.threads['villager'] = await self.channel.create_thread(name=game_id + "Village Talk",
-                                                                    type=discord.ChannelType.private_thread)
-
+                                                              type=discord.ChannelType.private_thread)
         # create werewolf thread
         self.threads['werewolf'] = await self.channel.create_thread(name=game_id + "Werewolf Chat",
-                                                                    type=discord.ChannelType.private_thread)
-
+                                                              type=discord.ChannelType.private_thread)
         # need player list to populate thread
         '''for wolf in werewolves:
             werewolves_thread.add_user(wolf)'''
         # create dead chat
         self.threads['ghost'] = await self.channel.create_thread(name=game_id + "Ghost Chat",
-                                                                 type=discord.ChannelType.private_thread)
-
-    def get_threads(self):
-        return self.threads
+                                                           type=discord.ChannelType.private_thread)
 
     async def allocate_role(self, user, thread: discord.Thread):
         self.player_list.append(model.Player(user))
         await thread.add_user(user)
 
+    async def deallocate_role(self):
+        pass
+
     async def delete(self):
-        for thread in asyncio.gather(a for a in self.threads.values()):
+        async for thread in asyncio.gather(a for a in self.threads.values()):
             await thread.delete()
 
         self.__del__()
 
     def __del__(self):
         del self
+
+    def get_threads(self):
+        pass
