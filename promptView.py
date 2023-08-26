@@ -49,6 +49,17 @@ async def on_ready():
 ########## I'm really sorry I don't know how to use classes and can't run this with them ############
 
 @bot.command()
+async def bot_help(ctx):
+    await ctx.send("Here is a list of commands use can use. Type /[command] help for more info."
+                   "\n/test_play \n/play \n/game_help")
+    
+@bot.command()
+async def game_help(ctx):
+    # show rules of the game
+    # await ctx.send("")
+    pass
+
+@bot.command()
 async def test_play(ctx, arg1 = None, arg2 = None):
     if arg1.lower() in ["h", "help"]:
         await ctx.send("Usage: /test_play [total number of players] [number of werewolves]")
