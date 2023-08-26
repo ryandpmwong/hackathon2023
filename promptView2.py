@@ -48,7 +48,7 @@ async def on_ready():
 ########## I'm really sorry I don't know how to use classes and can't run this with them ############
 
 @bot.command()
-async def play(ctx, arg1 = None, arg2 = None):
+async def play_game(ctx, arg1 = None, arg2 = None):
     """Runs on /test_play [num players] [num werewolf]"""
     if arg1 != None and arg1.lower() in ["h", "help"]:
         await ctx.send("Usage: /test_play [total number of players] [number of werewolves]")
@@ -71,16 +71,17 @@ async def play(ctx, arg1 = None, arg2 = None):
         await message.edit()
 
     async def button_start_callback(interaction):
+        await interaction.response.send_message(f"Sleep is great for you")
         message = await interaction.original_response()
         print(message)
-        await interaction.edit_original_response("New or old message first method?")
-        await message.edit()
+        #await interaction.edit_original_response("New or old message first method?")
+        await message.edit(content="There is no sleep in Ba Sing Se")
 
     async def button_boring_callback(interaction):
         await interaction.response.send_message("Oh. You clicked the other button.")
 
     button_join = Button(label="Join Game", style=discord.ButtonStyle.blurple)
-    button_start = Button(label="Start Game", style=discord.ButtonStyle.green, disabled=True)
+    button_start = Button(label="Start Game", style=discord.ButtonStyle.green, disabled=False)
     button3 = Button(label="Warning: I'm broken, Cancel", style=discord.ButtonStyle.red)
 
     #num of player conditions
