@@ -12,32 +12,60 @@ import model
 # Define all our constants here (and only constants!)
 
 
-load_dotenv()  # I think this is better to be put inside main - suggestion by Amy
+load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 
 client = discord.Client(intents=discord.Intents.default())  # can this go into run_werebot function?
 
 
-class WereWolfGame(commands.Cog):
-    def __init__(self, bot, players: list, game_mode='text'):
-        self.bot = bot
-        self.player = players
-        self.game_model = model.GameModel(len(players), game_mode)
+class WereWolfBot(discord.Client):
+    pass
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #
+    # async def on_ready(self):
+    #     for guild in client.guilds:
+    #         if guild.name == GUILD:
+    #             break
+    #
+    #     print(
+    #         f'{client.user} is connected to the following guild:\n'
+    #         f'{guild.name}(id: {guild.id})'
+    #     )
+    #
+    #     print("Guild members:")
+    #     for member in guild.members:
+    #         print(f"- {member.name}\n")
 
-    @app_commands.command()  #apparently this will enable to show us command in discord
-    @app_commands.describe(
-        number_of_people="The number of people in the game",
-        game_mode="Game mode, can be voice or text"
-    )
-    async def werewolfgame(self, interation: discord.Interaction, number_of_people: int = 5, game_mode: str = 'text'):
-        """
-        Starts a game of werewolf
-        :param interation:
-        :param number_of_people:
-        :param game_mode:
-        :return:
-        """
+
+class Round():
+    def __init__(self, players):
+        self.attacked = None
+        self.protected = None
+        self.players = players
+
+    def construct_werewolf_options(self) -> list:
+        options = []
+        for player in self.players:
+            if player.is_alive() and self.players[player] != 'werewolf':
+                options.append(discord.SelectOption(label=player.username, description='Vote to kill ' + player.username))
+        return options
+
+    async def werewolf_select(self, idk, options):
+        select = Select(placeholder="Vote for a player to kill", options=options)
+        view = View()
+        view.add_item(select)
+        await idk.send("Vote for a player to kill", view=view)
+
+    def run_night(self):
+        werewolf_options = construct_werewolf_options()
+        # type "Start of night [night_number]:" in the werewolf channel
+        # put the werewolf select in the werewolf channel
+        # do stuff depending on what the werewolves voted for
+
+    def run_day(self):
+        pass
 
 
 """
@@ -45,11 +73,6 @@ It is best to separate computational functions (with regular def) from async fun
 call the regular functions.
 regular function goes below:
 """
-
-
-
-
-
 
 """
 Async functions:
@@ -73,6 +96,15 @@ async def on_ready():
     # print()
     # members = '\n - '.join([member.name for member in guild.members])
     # print(f'Guild Members:\n - {members}')
+
+
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+
+    if message.content == 'hello':
+        await message.channel.send('Hi~')
 
 
 client.run(TOKEN)  # I think this should also go inside run_werebot
