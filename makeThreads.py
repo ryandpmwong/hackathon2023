@@ -28,6 +28,6 @@ class test_threads:
 
     async def delete_game_threads(self, channel_id):
         """Deletes game threads, or attempts to hahahahahahahahahahahahahah"""
-        self.all_player_thread.delete()
+        self.all_players_thread.delete()
         self.werewolves_thread.delete()
         self.dead_thread.delete()
