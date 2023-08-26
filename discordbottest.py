@@ -35,7 +35,7 @@ class Round():
         options = []
         for player in self.players:
             if self.players[player] != 'werewolf':
-                options.append(discord.SelectOption(label=player, description='Vote to kill ' + player))
+                options.append(discord.SelectOption(label=player.name, description='Vote to kill ' + player.name))
         return options
 
     async def print_current_ww_votes(self, channel, votes):
@@ -88,7 +88,7 @@ class Round():
     def construct_everyone_options(self) -> list:
         options = []
         for player in self.players:
-            options.append(discord.SelectOption(label=player, description='Vote to eliminate ' + player))
+            options.append(discord.SelectOption(label=player.name, description='Vote to eliminate ' + player.name))
         return options
 
     async def print_current_all_votes(self, channel, votes):
@@ -233,14 +233,12 @@ async def main():
     channel = client.get_channel(1144596818995466280)
     print('2')
     #await channel.send("Hello world!")
-    PLAYERS = {'player1': 'werewolf',
-               'player2': 'villager',
-               'player3': 'villager',
-               'player4': 'villager',
-               'player5': 'werewolf',
-               'player6': 'villager',
-               'player7': 'villager',}
-    this_round = Round(PLAYERS)
+    TEST_PLAYERS = {client.get_user(1030359292647321601): 'villager',
+               client.get_user(490790539042619393): 'villager',
+               client.get_user(1122876194665271428): 'werewolf',
+               client.get_user(624203419628077060): 'villager',
+               client.get_user(500433894043287562): 'villager'}
+    this_round = Round(TEST_PLAYERS)
     await this_round.run_night()
     print('3')
 
