@@ -46,34 +46,25 @@ class MakeButtons(commands.Cog):
         arg1='number of players',
         arg2='number of werewolves'
     )
-    async def play_game(self, ctx, arg1: str | None = None, arg2: str | None = None):
+    async def helopme(self, interaction, arg1: str | None = None, arg2: str | None = None):
         """Runs on /test_play [num players] [num werewolf]"""
+        ctx = await self.bot.get_context(interaction)
         self.num_players = arg1
         self.num_werewolves = arg2
-        print('play game')
-        ctx.reply("fsghfkjsdafgsudfhsk")
         if arg1 is None:
             ctx.send("arg1 cannot be empty")
             return
         if arg1.lower() in ["h", "help"]:
             await ctx.send("Usage: /test_play [total number of players] [number of werewolves]")
-            print('help')
             return
-        print('outside first if')
 
-        print('cooking up some butt0ns')
         self.button_join = Button(label="Join Game", style=discord.ButtonStyle.blurple)
-        print('button join config done')
         self.button_start = Button(label="Start Game", style=discord.ButtonStyle.green, disabled=True)
-        print('button_start_initialized')
         button_cancel = Button(label="Warning: I'm broken, Cancel", style=discord.ButtonStyle.red)
-        print('button cancel initialized')
 
-        print('set up callback')
 
         # num of player conditions
         if arg2 is not None:
-            print('arg2 is not None')
             if self.valid_player_numbers(int(arg1), int(arg2)):
                 players_joined = 0
 
@@ -113,15 +104,16 @@ class MakeButtons(commands.Cog):
             await interaction.response.send_message(f"{nickname} ({username}) has clicked a button! Blasphemous!")
         self.players_joined += 1
         self.players_joined_message.edit(content=f"{self.players_joined}/{self.num_players} players joined")
-        if self.players_joined == self.num_players:
+        print(self.players_joined, self.num_players)
+        if int(self.players_joined) == int(self.num_players):
+            print('Yes')
             self.button_start.disabled = False
             self.button_join.disabled = True
 
     async def button_start_callback(self, interaction):
         await interaction.response.send_message(f"Sleep is great for you")
         message = await interaction.original_response()
-        # print(message)
-        # await interaction.edit_original_response("New or old message first method?")
+        self.reset()
         await message.edit(content="There is no sleep in Ba Sing Se")
 
     async def button_boring_callback(self, interaction):
@@ -133,6 +125,16 @@ class MakeButtons(commands.Cog):
             return False
         else:
             return True
+
+    def reset(self):
+        self.button_start = None
+        self.button_join = None
+        self.button_message = None
+        self.num_players = None
+        self.num_werewolves = None
+        self.players_joined = 0
+        self.players_joined_message = None
+
 
 
 async def setup(the_bot):
