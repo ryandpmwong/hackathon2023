@@ -46,6 +46,9 @@ async def on_ready():
     print("Ready!")
 
 ########## I'm really sorry I don't know how to use classes and can't run this with them ############
+global num_players_global_blasphemy
+num_players_global_blasphemy = 0
+global players_joined_message
 
 @bot.command()
 async def play_game(ctx, arg1 = None, arg2 = None):
@@ -54,10 +57,12 @@ async def play_game(ctx, arg1 = None, arg2 = None):
         await ctx.send("Usage: /test_play [total number of players] [number of werewolves]")
         return
     
+    global num_players_global_blasphemy
     nickname = ctx.author.nick
     username = ctx.author
         
     async def button_join_callback(interaction):
+        global num_players_global_blasphemy
         """Prints username/nicknames and a message"""
         nickname = interaction.user.nick
         username = interaction.user
@@ -65,15 +70,18 @@ async def play_game(ctx, arg1 = None, arg2 = None):
             await interaction.response.send_message(f"{username} has clicked a button! Blasphemous!")
         else:
             await interaction.response.send_message(f"{nickname} ({username}) has clicked a button! Blasphemous!")
+        num_players_global_blasphemy += 1
+        players_joined_message.edit(content=(f"15/{arg1} players joined"))
         #players_joined += 1
         #print(players_joined)
-        message = await interaction.original_response()
-        await message.edit()
+        #message = await interaction.original_response()
+        #await message.edit()
 
     async def button_start_callback(interaction):
+        global num_players_global_blasphemy
         await interaction.response.send_message(f"Sleep is great for you")
         message = await interaction.original_response()
-        print(message)
+        #print(message)
         #await interaction.edit_original_response("New or old message first method?")
         await message.edit(content="There is no sleep in Ba Sing Se")
 
@@ -101,14 +109,15 @@ async def play_game(ctx, arg1 = None, arg2 = None):
             view.add_item(button3)
             #view.remove_item(button)
 
+            num_players_global_blasphemy = 0
             if nickname != None:
-                start_message = await ctx.send((f"{nickname} ({username}) has started a {arg2} werewolf game! 🐺" \
-                                                f"\n {players_joined}/{arg1} players joined"),
-                                                view=view)
+                start_message = await ctx.send(f"{nickname} ({username}) has started a {arg2} werewolf game! 🐺")
             else:
-                start_message = await ctx.send((f"{username} has started a {arg2} werewolf game! 🐺" \
-                                f"\n {players_joined}/{arg1} players joined"),
-                                view=view)
+                start_message = await ctx.send(f"{username} has started a {arg2} werewolf game! 🐺")
+                                                
+            players_joined_message = await ctx.send(f"{players_joined}/{arg1} players joined")
+            button_message = await ctx.send(view=view)
+            
         else:
            await ctx.send("Too many werewolves. Please enter a lower amount of werewolves.")
 
@@ -128,14 +137,14 @@ async def play_game(ctx, arg1 = None, arg2 = None):
         view.add_item(button3)
         #view.remove_item(button)
 
+        num_players_global_blasphemy = 0
         if nickname != None:
-            start_message = await ctx.send((f"{nickname} ({username}) has started a game! 🐺" \
-                                    f"\n {players_joined}/{arg1} players joined"),
-                                    view=view)
+            start_message = await ctx.send(f"{nickname} ({username}) has started a game! 🐺")
         else:
-            start_message = await ctx.send((f"{username} has started a game! 🐺" \
-                        f"\n {players_joined}/{arg1} players joined"),
-                        view=view)
+            start_message = await ctx.send(f"{username} has started a game! 🐺")
+
+        players_joined_message = await ctx.send(f"{players_joined}/{arg1} players joined")
+        button_message = await ctx.send(view=view)
         #await ctx.send(str(ctx.author)+" wants to start a game with "+arg1+" players.")
     else:
         await ctx.send("You haven't entered the number of players.")
