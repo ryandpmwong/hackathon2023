@@ -2,15 +2,22 @@ import os
 
 import asyncio
 import discord
+import discord.ext
 from discord import app_commands
 from discord.ext import commands
 from discord.ui import Button, View
 from dotenv import load_dotenv
 from makeThreads import test_threads
-import promptView
 
 import model
 import game
+
+MAKE_THREADS = "Make me some threads"
+CLEAR_THREADS = "Clear all threads"
+GREETINGS = "hi hello good evening good morning good night greeting welcome"
+
+
+
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -25,46 +32,39 @@ class WereWolfBot(commands.Bot):
         print(f"{self.user} is ready and on the roll")
 
     async def on_message(self, message):
-        p_message = message.content.strip().split(' ')
         if message.author.bot:
-            return
-
-        if message.content == "Make me some threads":
-            new_game = game.WerewolfGame(message.channel, message.author)
-            await new_game.create_game_threads()
-            await new_game.allocate_role(message.author, new_game.threads['villager'])
-            await new_game.allocate_role(message.author, new_game.threads['werewolf'])
-            await new_game.allocate_role(message.author, new_game.threads['ghost'])
-            # add function to ask for player usernames later.
-            self.game_dict[new_game.ID] = new_game
-
-        if p_message[0] == "Remove" and len(p_message) == 2:
-            user_id = int(p_message[1])
-            user = self.get_user(user_id)
-            # need to convert to user id somehow
-            await self.game_dict[0].deallocate_role(user, message.channel) # Apparently, you can only do this with user.id
-
-        if message.content == "Clear all threads":
-            for thread in message.channel.threads:
-                await thread.delete()
-
-        elif len(p_message) == 3 and p_message[0] == 'Delete' and (p_message[1] == 'threads'):
-            game_id = int(p_message[2])
-            try:
-                await self.game_dict.get(game_id).delete()
-            except AttributeError:
-                await message.channel.send("This game has already been deleted or hadn't been created")
-
-
-        if message.content == "Hi":
-            await message.channel.send("Hello~")
-            print(message.author.id)
-
-        if message.content == "Give me buttons":
             return
 
         # if message.channel.name == 'testing' and not message.author.bot:
         #     await message.channel.send(f"{message.author} has send a message: {message.content}")
+
+
+    async def handle_responses(self, message):
+        if message.content == MAKE_THREADS:
+            new_game = game.WerewolfGame(message.channel, message.author)
+            await new_game.create_game_threads()
+        elif message.content == CLEAR_THREADS:
+            for thread in message.channel.threads:
+                await thread.delete()
+        elif message.content.lower() in GREETINGS:
+            await message.channel.send(message.content + '~')
+        else:
+            p_message = message.content.split(' ')
+
+            if p_message[0] == "Remove" and len(p_message) == 2:
+                user_id = int(p_message[1])
+                user = self.get_user(user_id)
+                # need to convert to user id somehow
+                await self.game_dict[0].deallocate_role(user, message.channel)
+            elif len(p_message) == 3 and p_message[0] == 'Delete' and (p_message[1] == 'threads'):
+                game_id = int(p_message[2])
+                try:
+                    await self.game_dict.get(game_id).delete()
+                except AttributeError:
+                    await message.channel.send("This game has already been deleted or hadn't been created")
+
+
+
 
     async def on_message_edit(self, before, after):
         if before.channel.name != 'testing' or before.author.bot:

@@ -32,17 +32,20 @@ class WerewolfGame:
         message = "Welcome to Werewolf!"
         print(message)  # tr
         villager = await self.channel.create_thread(name=game_id + "Village Talk",
-                                                    type=discord.ChannelType.private_thread)
+                                                    type=discord.ChannelType.private_thread,
+                                                    invitable=False)
         self.threads['villager'] = villager
         # create werewolf thread
         self.threads['werewolf'] = await self.channel.create_thread(name=game_id + "Werewolf Chat",
-                                                                    type=discord.ChannelType.private_thread)
+                                                                    type=discord.ChannelType.private_thread,
+                                                                    invitable=False)
         # need player list to populate thread
         '''for wolf in werewolves:
             werewolves_thread.add_user(wolf)'''
         # create dead chat
         self.threads['ghost'] = await self.channel.create_thread(name=game_id + "Ghost Chat",
-                                                                 type=discord.ChannelType.private_thread)
+                                                                 type=discord.ChannelType.private_thread,
+                                                                 invitable=False)
 
     async def get_threads(self):
         return self.threads.values()
