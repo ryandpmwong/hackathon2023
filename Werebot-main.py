@@ -42,10 +42,13 @@ class WereWolfBot(discord.Client):
 
 
 class Round():
-    def __init__(self, players):
+    def __init__(self, players, round_number):
         self.attacked = None
         self.protected = None
         self.players = players
+        self.round_number = round_number
+        self.werewolf_options = self.construct_werewolf_options()
+        self.werewolf_channel = client.get_channel(1144596818995466280)  # change this later
 
     def construct_werewolf_options(self) -> list:
         options = []
@@ -54,18 +57,19 @@ class Round():
                 options.append(discord.SelectOption(label=player.username, description='Vote to kill ' + player.username))
         return options
 
-    async def werewolf_select(self, idk, options):
+    async def werewolf_select(self, channel, options):
         select = Select(placeholder="Vote for a player to kill", options=options)
         view = View()
         view.add_item(select)
-
+        
+        #this part doesnt rly work
         async def werewolf_callback(interaction):
             await interaction.response.send_message(f"Werewolf chose: {select_values[0]}")
             
-        await idk.send("Vote for a player to kill", view=view)
+        await channel.send("Vote for a player to kill", view=view)
 
-    def run_night(self):
-        werewolf_options = construct_werewolf_options()
+    async def run_night(self):
+        await self.werewolf_select(self.werewolf_channel, self.werewolf_options)
         # type "Start of night [night_number]:" in the werewolf channel
         # put the werewolf select in the werewolf channel
         # do stuff depending on what the werewolves voted for
