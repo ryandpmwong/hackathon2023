@@ -138,12 +138,23 @@ class Witch(Player):  # or doctor? Whatever name you guys want
 
 #was thinking some Round class like this might be useful?
 class Round():
-    def __init__(self):
+    def __init__(self, players):
         self.attacked = None  # the player that the werewolves choose to kill this round
         self.protected = None  # the player that the healer guy chooses to save this round
+        self.players = players
         
     def run_night(self):
-        pass
+        # let the werewolves choose a person to kill
+        #self.attacked = 
+        
+        # witch section
+        '''
+        for player in players:
+            if player.is_alive() and players[player] == 'witch':
+                # let the witch do witch things
+                break
+        '''
 
     def run_day(self):
+        #discussion and voting stuff
         pass
