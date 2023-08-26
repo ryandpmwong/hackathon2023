@@ -1,9 +1,14 @@
+import os
+
 import discord
 from discord import app_commands
 from discord.ext import commands
+from dotenv import load_dotenv
+
 import model
 
-
+load_dotenv()
+TOKEN = os.getenv('DISCORD_TOKEN')
 class WereWolfBot(commands.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -37,5 +42,5 @@ bot = WereWolfBot(
     description="This is the Game werebot",
     intents=discord.Intents.all()
 )
-bot.run("MTE0NDU1MTU2OTE3MDM3MDU5Mw.Gkdos6.bwWMYA2Sn150-fLMj13b3O-anD8GP3ogLtshns")
+bot.run(TOKEN)
 

@@ -11,7 +11,7 @@ import model
 # Define all our constants here (and only constants!)
 
 
-load_dotenv()  # I think this is better to be put inside main - suggestion by Amy
+load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 
