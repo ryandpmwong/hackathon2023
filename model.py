@@ -31,7 +31,7 @@ class GameModel:
 
     def generate_players(self, user_list):
         players_info = {}
-        for i in range(0, self.roles['werewolf'])
+        for i in range(0, self.roles['werewolf']):
             player = random.choice(user_list)
             while player in players_info:
                 player = random.choice(user_list)
