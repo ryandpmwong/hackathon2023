@@ -136,7 +136,10 @@ class Witch(Player):  # or doctor? Whatever name you guys want
     def get_potion_status(self):
         return f"poison: {int(self.poison)}, medicine: {int(self.medicine)}"
 
+
 #was thinking some Round class like this might be useful?
+#this was all moved to werebot-main
+'''
 class Round():
     def __init__(self, players):
         self.attacked = None  # the player that the werewolves choose to kill this round
@@ -148,13 +151,14 @@ class Round():
         #self.attacked = 
         
         # witch section
-        '''
+        
         for player in players:
             if player.is_alive() and players[player] == 'witch':
                 # let the witch do witch things
                 break
-        '''
+        
 
     def run_day(self):
         #discussion and voting stuff
         pass
+'''
