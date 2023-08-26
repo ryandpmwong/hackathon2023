@@ -1,5 +1,5 @@
 import discord
-
+import asyncio
 
 class test_threads:
 
@@ -19,23 +19,35 @@ class test_threads:
         # create public thread for all players
         self.all_players_thread = await self.channel.create_thread(name=game_id + "Village Talk",
                                                                       type=discord.ChannelType.private_thread)
+        print(self.all_players_thread)
+        print(type(self.all_players_thread))
+
         # create werewolf thread
         self.werewolves_thread = await self.channel.create_thread(name=game_id + "Werewolf Chat",
                                                                      type=discord.ChannelType.private_thread)
+
+        print(self.werewolves_thread)
+        print(type(self.werewolves_thread))
+
         # need player list to populate thread
         '''for wolf in werewolves:
             werewolves_thread.add_user(wolf)'''
         # create dead chat
         self.dead_thread = await self.channel.create_thread(name=game_id + "Ghost Chat",
                                                                type=discord.ChannelType.private_thread)
+        print(self.dead_thread)
+        print(type(self.dead_thread))
 
         # testing, adding myself
         discord_handle = self.author
         await self.all_players_thread.add_user(discord_handle)
         await self.werewolves_thread.add_user(discord_handle)
 
-    async def delete_game_threads(self, channel_id):
-        """Deletes game threads, or attempts to hahahahahahahahahahahahahah"""
-        await self.all_players_thread.delete()
-        await self.werewolves_thread.delete()
-        await self.dead_thread.delete()
+        return [self.all_players_thread, self.werewolves_thread, self.dead_thread]
+
+
+
+    # async def delete_game_threads(self, channel):
+    #     await channel.delete()
+    #     """Deletes game threads, or attempts to hahahahahahahahahahahahahah"""
+

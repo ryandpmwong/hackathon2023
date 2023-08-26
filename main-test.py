@@ -15,12 +15,12 @@ description = "I am an amazing bot, YES."
 
 
 async def main():
-    intends = discord.Intents.all()
+    intents = discord.Intents.all()
 
     bot = WereWolfBot(
         command_prefix="?",
         description=description,
-        intents=intends
+        intents=intents
     )
     cogs = [
         "play"
