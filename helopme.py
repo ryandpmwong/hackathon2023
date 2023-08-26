@@ -23,10 +23,14 @@ tree = discord.app_commands.CommandTree(client)
 
 class MakeButtons(commands.Cog):
     def __init__(self, bot):
+        self.players_joined = 0
+        self.button_message = None
         self.bot = bot
-        self.players_joined_message = ''
+        self.players_joined_message = None
         self.num_players = None
         self.num_werewolves = None
+        self.button_start = None
+        self.button_join = None
 
     # async def create_start_prompt(self):
     #     return
@@ -47,19 +51,23 @@ class MakeButtons(commands.Cog):
         self.num_players = arg1
         self.num_werewolves = arg2
         print('play game')
+        ctx.reply("fsghfkjsdafgsudfhsk")
         if arg1 is None:
+            ctx.send("arg1 cannot be empty")
             return
         if arg1.lower() in ["h", "help"]:
             await ctx.send("Usage: /test_play [total number of players] [number of werewolves]")
             print('help')
             return
         print('outside first if')
-        nickname = ctx.author.nick
-        username = ctx.author
 
-        button_join = Button(label="Join Game", style=discord.ButtonStyle.blurple)
-        button_start = Button(label="Start Game", style=discord.ButtonStyle.green, disabled=False)
-        button3 = Button(label="Warning: I'm broken, Cancel", style=discord.ButtonStyle.red)
+        print('cooking up some butt0ns')
+        self.button_join = Button(label="Join Game", style=discord.ButtonStyle.blurple)
+        print('button join config done')
+        self.button_start = Button(label="Start Game", style=discord.ButtonStyle.green, disabled=True)
+        print('button_start_initialized')
+        button_cancel = Button(label="Warning: I'm broken, Cancel", style=discord.ButtonStyle.red)
+        print('button cancel initialized')
 
         print('set up callback')
 
@@ -71,29 +79,27 @@ class MakeButtons(commands.Cog):
 
                 # await ctx.send(str(ctx.author)+" wants to start a game with "+arg1+" players and "+arg2+" werewolves.")
 
-                button_join.callback = lambda interaction: self.button_join_callback(interaction)
-                button_start.callback = lambda interaction: self.button_start_callback(interaction)
-                button3.callback = lambda interaction: self.button_boring_callback(interaction)
+                self.button_join.callback = lambda interaction: self.button_join_callback(interaction)
+                self.button_start.callback = lambda interaction: self.button_start_callback(interaction)
+                button_cancel.callback = lambda interaction: self.button_boring_callback(interaction)
 
                 view = View()
-                view.add_item(button_join)
-                view.add_item(button_start)
-                view.add_item(button3)
+                view.add_item(self.button_join)
+                view.add_item(self.button_start)
+                view.add_item(button_cancel)
                 # view.remove_item(button)
 
-                num_players_global_blasphemy = 0
-                if nickname is not None:
-                    start_message = await ctx.send(f"{nickname} ({username}) has started a {arg2} werewolf game! 🐺")
+                if ctx.author.nick is not None:
+                    start_message = await ctx.send(
+                        f"{ctx.author.nick} ({ctx.author}) has started a {self.num_werewolves} werewolf game! 🐺")
                 else:
-                    start_message = await ctx.send(f"{username} has started a {arg2} werewolf game! 🐺")
+                    start_message = await ctx.send(f"{ctx.author} has started a {self.num_werewolves} werewolf game! 🐺")
 
-                players_joined_message = await ctx.send(f"{players_joined}/{arg1} players joined")
-                button_message = await ctx.send(view=view)
+                self.players_joined_message = await ctx.send(f"{self.players_joined}/{self.num_players} players joined")
+                self.button_message = await ctx.send(view=view)
 
             else:
                 await ctx.send("Too many werewolves. Please enter a lower amount of werewolves.")
-
-
 
     # function to manage player number check
 
@@ -105,11 +111,11 @@ class MakeButtons(commands.Cog):
             await interaction.response.send_message(f"{username} has clicked a button! Blasphemous!")
         else:
             await interaction.response.send_message(f"{nickname} ({username}) has clicked a button! Blasphemous!")
-        self.players_joined_message.edit(content=(f"15/{arg1} players joined"))
-        # players_joined += 1
-        # print(players_joined)
-        # message = await interaction.original_response()
-        # await message.edit()
+        self.players_joined += 1
+        self.players_joined_message.edit(content=f"{self.players_joined}/{self.num_players} players joined")
+        if self.players_joined == self.num_players:
+            self.button_start.disabled = False
+            self.button_join.disabled = True
 
     async def button_start_callback(self, interaction):
         await interaction.response.send_message(f"Sleep is great for you")
