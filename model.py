@@ -138,15 +138,14 @@ class Doctor(Player):  # or doctor? Whatever name you guys want
 
 #was thinking some Round class like this might be useful?
 #this was all moved to werebot-main
-'''
-class Round():
+'''class Round():
     def __init__(self, players : list[Player]):
         self.attacked = None  # the player that the werewolves choose to kill this round
         self.protected = None  # the player that the healer guy chooses to save this round
         self.players = players
         
     def run_night(self, target):
-        let the werewolves choose a person to kill
+        #let the werewolves choose a person to kill
         self.attacked = target
         
         #doctor section
