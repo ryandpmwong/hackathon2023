@@ -27,6 +27,8 @@ class WereWolfBot(commands.Bot):
             await message.channel.send(f"{message.author} has send a message: {message.content}")
 
     async def on_message_edit(self, before, after):
+        if before.channel.name != 'testing':
+            return
         await before.channel.send(
             f"{before.author} edited a message\n"
             f"before message: {before.content}\n"
@@ -36,11 +38,11 @@ class WereWolfBot(commands.Bot):
 
 
 
-
-bot = WereWolfBot(
-    command_prefix='/',
-    description="This is the Game werebot",
-    intents=discord.Intents.all()
-)
-bot.run(TOKEN)
+#
+# bot = WereWolfBot(
+#     command_prefix='/',
+#     description="This is the Game werebot",
+#     intents=discord.Intents.all()
+# )
+# bot.run(TOKEN)
 
