@@ -21,9 +21,20 @@ class WereWolfBot(commands.Bot):
         if message.author == self.user:
             return
 
+        if message.content == "Make me some threads":
+            bot = makeThreads(channel.id)
+            bot.create_game_threads(channel.id)
+
+        if message.content == "Delete Werewolf threads":
+            bot = makeThreads(channel.id)
+            bot.delete_game_threads(channel.id)
+
         if message.content == "Hi":
             await message.channel.send("Hello~")
         print(message)
+
+        #bot_list = ["bot1144551569170370593#0916", ]
+
         if message.channel.name == 'testing':
             await message.channel.send(f"{message.author} has send a message: {message.content}")
 
@@ -39,11 +50,11 @@ class WereWolfBot(commands.Bot):
 
 
 
-#
-# bot = WereWolfBot(
-#     command_prefix='/',
-#     description="This is the Game werebot",
-#     intents=discord.Intents.all()
-# )
-# bot.run(TOKEN)
+
+bot = WereWolfBot(
+    command_prefix='/',
+    description="This is the Game werebot",
+    intents=discord.Intents.all()
+)
+bot.run(TOKEN)
 
