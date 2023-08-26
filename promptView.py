@@ -59,6 +59,7 @@ async def play(ctx):
     button1 = Button(label="Don't click me ;_;", style=discord.ButtonStyle.blurple)
     button2 = Button(label="I would ask you to start the game.", style=discord.ButtonStyle.green)
     button3 = Button(label="Warning: I'm broken", style=discord.ButtonStyle.red)
+    players_joined = 0
 
     async def button1_callback(interaction):
         nickname = interaction.user.nick
@@ -67,6 +68,11 @@ async def play(ctx):
             await interaction.response.send_message(f"{username} has clicked a button! Blasphemous!")
         else:
             await interaction.response.send_message(f"{nickname} ({username}) has clicked a button! Blasphemous!")
+        players_joined += 1
+        print(players_joined)
+        message = await interaction.original_response()
+        
+        await start_message.edit(f"Username of some sort has started a game! 🐺\n {players_joined}/666 players joined", view=view)
 
     button1.callback = button1_callback
 
@@ -75,7 +81,7 @@ async def play(ctx):
     view.add_item(button2)
     view.add_item(button3)
     #view.remove_item(button)
-    await ctx.send("Username of some sort has started a game! 🐺\n x/y players joined", view=view)
+    start_message = await ctx.send(f"Username of some sort has started a game! 🐺\n {players_joined}/666 players joined", view=view)
 
 bot.run(TOKEN)
 
