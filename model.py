@@ -11,7 +11,7 @@ class GameModel:
     Also, what should happen if not enough people sign up?
     """
 
-    def __init__(self, num_players: int, game_mode):
+    def __init__(self, num_players: int, game_mode, user_list):
         # In class Game of Werebot-main, the game mode is defined to be "text" by default. Perhaps doing game mode in
         # class Game is better, so we can have game model only focus on internal stuff - to be discussed
 
@@ -25,7 +25,7 @@ class GameModel:
         self.roles = {'villager': self.villager_num, 'werewolf': self.werewolf_num}
         self.user_list = []  # list of player objects
         # need to generate user list from methods
-        self.players = self.generate_players(num_players)
+        self.players = self.generate_players(user_list)
         self.day = 0
 
 
@@ -94,7 +94,7 @@ class Villager(Player):
         return "Villager"
 
 
-class Witch(Player):  # or doctor? Whatever name you guys want
+class Doctor(Player):  # or doctor? Whatever name you guys want
     """
     Witch owns a poison and a cure medicine.
     They can choose to save the people being killed or poison others at night
@@ -102,7 +102,6 @@ class Witch(Player):  # or doctor? Whatever name you guys want
 
     def __init__(self, username):
         super().__init__(username)
-        self.poison = True
         self.medicine = True
 
     def get_side(self):
@@ -141,22 +140,16 @@ class Witch(Player):  # or doctor? Whatever name you guys want
 #this was all moved to werebot-main
 '''
 class Round():
-    def __init__(self, players):
+    def __init__(self, players : list[Player]):
         self.attacked = None  # the player that the werewolves choose to kill this round
         self.protected = None  # the player that the healer guy chooses to save this round
         self.players = players
         
-    def run_night(self):
-        # let the werewolves choose a person to kill
-        #self.attacked = 
+    def run_night(self, target):
+        let the werewolves choose a person to kill
+        self.attacked = target
         
-        # witch section
-        
-        for player in players:
-            if player.is_alive() and players[player] == 'witch':
-                # let the witch do witch things
-                break
-        
+        #doctor section
 
     def run_day(self):
         #discussion and voting stuff
