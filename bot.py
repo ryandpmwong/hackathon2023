@@ -25,6 +25,7 @@ class WereWolfBot(commands.Bot):
         print(f"{self.user} is ready and on the roll")
 
     async def on_message(self, message):
+        p_message = message.content.strip().split(' ')
         if message.author.bot:
             return
 
@@ -37,8 +38,10 @@ class WereWolfBot(commands.Bot):
             # add function to ask for player usernames later.
             self.game_dict[new_game.ID] = new_game
 
-        if message.content == "Remove player":
-            await self.game_dict[0].deallocate_role(message.author, self.game_dict[0].threads['villager'])
+        if p_message[0] == "Remove" and len(p_message) == 2:
+            username = p_message[1]
+            # need to convert to user id somehow
+            await self.game_dict[0].deallocate_role(username, message.channel) # Apparently, you can only do this with user.id
 
         elif message.content == "Delete Werewolf threads":
             pass
