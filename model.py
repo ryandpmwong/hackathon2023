@@ -1,6 +1,9 @@
 import math
 import random
 
+import discord
+
+
 class GameModel:
     """
     Initializes a new game of Werewolf with appropriate number of players
@@ -51,13 +54,16 @@ class Player:
     Incomplete. Need to add more functionality
     """
 
-    def __init__(self, username):
-        self.username = username
+    def __init__(self, user: discord.User):
+        self.user = user
         self.alive = True
         pass
 
-    def get_username(self):
-        return self.username
+    def get_user(self):
+        return self.user
+
+    def get_user_name(self):
+        return self.user.name
 
     def get_side(self):
         return None  # might modify later: eg. by default return good
@@ -73,8 +79,8 @@ class Player:
 
 
 class Werewolf(Player):
-    def __init__(self, username):
-        super().__init__(username)
+    def __init__(self, user):
+        super().__init__(user)
 
     def get_side(self):
         return 'Bad'
@@ -84,8 +90,8 @@ class Werewolf(Player):
 
 
 class Villager(Player):
-    def __init__(self, username):
-        super().__init__(username)
+    def __init__(self, user):
+        super().__init__(user)
 
     def get_side(self):
         return 'Good'
@@ -100,8 +106,8 @@ class Doctor(Player):  # or doctor? Whatever name you guys want
     They can choose to save the people being killed or poison others at night
     """
 
-    def __init__(self, username):
-        super().__init__(username)
+    def __init__(self, user):
+        super().__init__(user)
         self.medicine = True
 
     def get_side(self):
