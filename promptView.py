@@ -55,7 +55,7 @@ async def slash_command(interaction: discord.Interaction):
 
 @bot.command()
 # Make Button?
-async def hello(ctx):
+async def play(ctx):
     button1 = Button(label="Don't click me ;_;", style=discord.ButtonStyle.blurple)
     button2 = Button(label="I would ask you to start the game.", style=discord.ButtonStyle.green)
     button3 = Button(label="Warning: I'm broken", style=discord.ButtonStyle.red)
