@@ -17,8 +17,6 @@ description = "I am an amazing bot, YES."
 async def main():
     intents = discord.Intents.all()
     client = discord.Client(intents=intents)
-    tree = discord.app_commands.CommandTree(client)
-
 
     bot = WereWolfBot(
         command_prefix="/",
@@ -26,7 +24,8 @@ async def main():
         intents=intents
     )
     cogs = [
-        "play"
+        'helopme',
+        'play'
     ]
 
     for cog in cogs:

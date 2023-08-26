@@ -244,6 +244,6 @@ async def main():
     await this_round.run_night()
     print('3')
 
-client.run(TOKEN)
+
 
 #main()

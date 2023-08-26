@@ -36,7 +36,7 @@ class WerewolfGame:
         self.threads = {}
         self.day = 0
         self.is_day = True
-        self.round = Round(self.players)
+        # self.round = Round(self.players)
 
 
     async def create_game_threads(self):
@@ -65,7 +65,7 @@ class WerewolfGame:
                                                  invitable=False)
         self.threads[ghost] = []
 
-    def generate_players(self, users: list[discord.User]):
+    async def generate_players(self, users: list[discord.User]):
         """
         generate players and allocate them into correct threads
         :param users: discord.User, users who have joined the game.
@@ -98,6 +98,7 @@ class WerewolfGame:
             self.threads[thread].append(model.Werewolf(user))
         await thread.add_user(user)
 
+
     async def deallocate_role(self, user, thread: discord.Thread):
         await thread.remove_user(user)
 
@@ -114,9 +115,9 @@ class WerewolfGame:
         if self.is_day:
             pass
 
-    def werewolf_round(self):
+    async def werewolf_round(self):
         for user in self.threads[1]:
-            await self.allocate_role(user, list(self.threads.keys())[1])
+            await self.allocate_role(user, list(self.threads.keys())[1], 'werewolf')
         # vote
 
     def is_game_over(self) -> bool or str:
