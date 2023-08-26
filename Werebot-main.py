@@ -38,7 +38,33 @@ class WereWolfBot(discord.Client):
     #         print(f"- {member.name}\n")
 
 
+class Round():
+    def __init__(self, players):
+        self.attacked = None
+        self.protected = None
+        self.players = players
 
+    def construct_werewolf_options(self) -> list:
+        options = []
+        for player in self.players:
+            if player.is_alive() and self.players[player] != 'werewolf':
+                options.append(discord.SelectOption(label=player.username, description='Vote to kill ' + player.username))
+        return options
+
+    async def werewolf_select(self, idk, options):
+        select = Select(placeholder="Vote for a player to kill", options=options)
+        view = View()
+        view.add_item(select)
+        await idk.send("Vote for a player to kill", view=view)
+
+    def run_night(self):
+        werewolf_options = construct_werewolf_options()
+        # type "Start of night [night_number]:" in the werewolf channel
+        # put the werewolf select in the werewolf channel
+        # do stuff depending on what the werewolves voted for
+
+    def run_day(self):
+        pass
 
 
 """
