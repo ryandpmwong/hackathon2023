@@ -11,7 +11,7 @@ class GameModel:
     Also, what should happen if not enough people sign up?
     """
 
-    def __init__(self, num_players: int, game_mode):
+    def __init__(self, num_players: int, game_mode, user_list):
         # In class Game of Werebot-main, the game mode is defined to be "text" by default. Perhaps doing game mode in
         # class Game is better, so we can have game model only focus on internal stuff - to be discussed
 
