@@ -13,20 +13,20 @@ class test_threads:
     async def create_game_threads(self):
         """When command is triggered
         Store number of running games"""
-        game_id = "game1"
+        game_id = "Game 1: "
         message = "Welcome to Werewolf!"
 
         # create public thread for all players
-        self.all_players_thread = await self.channel.create_thread(name=game_id + "-everyone",
+        self.all_players_thread = await self.channel.create_thread(name=game_id + "Village Talk",
                                                                       type=discord.ChannelType.private_thread)
         # create werewolf thread
-        self.werewolves_thread = await self.channel.create_thread(name=game_id + "-werewolves",
+        self.werewolves_thread = await self.channel.create_thread(name=game_id + "Werewolf Chat",
                                                                      type=discord.ChannelType.private_thread)
         # need player list to populate thread
         '''for wolf in werewolves:
             werewolves_thread.add_user(wolf)'''
         # create dead chat
-        self.dead_thread = await self.channel.create_thread(name=game_id + " dead",
+        self.dead_thread = await self.channel.create_thread(name=game_id + "Ghost Chat",
                                                                type=discord.ChannelType.private_thread)
 
         # testing, adding myself
