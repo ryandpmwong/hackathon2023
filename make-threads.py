@@ -16,3 +16,8 @@ async def create_game_threads(channel_id):
 
 async def delete_game_threads(channel_id):
     pass
+
+class test_threads:
+    def __init__(self, channel_id):
+        self.all_players_thread = None
+        pass

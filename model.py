@@ -25,7 +25,7 @@ class GameModel:
         self.roles = {'villager': self.villager_num, 'werewolf': self.werewolf_num}
         self.user_list = []  # list of player objects
         # need to generate user list from methods
-        self.players = self.generate_players(num_players)
+        self.players = self.generate_players(user_list)
         self.day = 0
 
 
