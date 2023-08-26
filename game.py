@@ -1,7 +1,9 @@
+import collections.abc
+
 import discord
 import model
 import asyncio
-
+from collections import abc
 
 """
 Inform me on discord when modifying this file OR DDIIIIIE
@@ -24,37 +26,39 @@ class WerewolfGame:
 
     async def create_game_threads(self):
         """When command is triggered
-        Store number of running games"""
+        Store number of running games
+        Should run at most 1 time for each game instance"""
         game_id = f"Game {self.ID}: "
         message = "Welcome to Werewolf!"
-        print(message) #tr
-        self.threads['villager'] = await self.channel.create_thread(name=game_id + "Village Talk",
-                                                              type=discord.ChannelType.private_thread)
+        print(message)  # tr
+        villager = await self.channel.create_thread(name=game_id + "Village Talk",
+                                                    type=discord.ChannelType.private_thread)
+        self.threads['villager'] = villager
         # create werewolf thread
         self.threads['werewolf'] = await self.channel.create_thread(name=game_id + "Werewolf Chat",
-                                                              type=discord.ChannelType.private_thread)
+                                                                    type=discord.ChannelType.private_thread)
         # need player list to populate thread
         '''for wolf in werewolves:
             werewolves_thread.add_user(wolf)'''
         # create dead chat
         self.threads['ghost'] = await self.channel.create_thread(name=game_id + "Ghost Chat",
-                                                           type=discord.ChannelType.private_thread)
+                                                                 type=discord.ChannelType.private_thread)
+
+    async def get_threads(self):
+        return self.threads.values()
 
     async def allocate_role(self, user, thread: discord.Thread):
         self.player_list.append(model.Player(user))
         await thread.add_user(user)
 
-    async def deallocate_role(self, user, thread:discord.Thread):
+    async def deallocate_role(self, user, thread: discord.Thread):
         await thread.remove_user(user)
 
     async def delete(self):
-        async for thread in asyncio.gather(a for a in self.threads.values()): # need to be modified
+        for thread in self.threads.values():  # need to be modified
             await thread.delete()
 
         self.__del__()
 
     def __del__(self):
         del self
-
-    def get_threads(self):
-        pass

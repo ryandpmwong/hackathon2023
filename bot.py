@@ -39,15 +39,26 @@ class WereWolfBot(commands.Bot):
             self.game_dict[new_game.ID] = new_game
 
         if p_message[0] == "Remove" and len(p_message) == 2:
-            username = p_message[1]
+            user_id = int(p_message[1])
+            user = self.get_user(user_id)
             # need to convert to user id somehow
-            await self.game_dict[0].deallocate_role(username, message.channel) # Apparently, you can only do this with user.id
+            await self.game_dict[0].deallocate_role(user, message.channel) # Apparently, you can only do this with user.id
 
-        elif message.content == "Delete Werewolf threads":
-            pass
+        if message.content == "Clear all threads":
+            for thread in message.channel.threads:
+                await thread.delete()
+
+        elif len(p_message) == 3 and p_message[0] == 'Delete' and (p_message[1] == 'threads'):
+            game_id = int(p_message[2])
+            try:
+                await self.game_dict.get(game_id).delete()
+            except AttributeError:
+                await message.channel.send("This game has already been deleted or hadn't been created")
+
 
         if message.content == "Hi":
             await message.channel.send("Hello~")
+            print(message.author.id)
 
         if message.content == "Give me buttons":
             return
