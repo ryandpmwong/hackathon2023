@@ -40,7 +40,7 @@ async def on_ready():
 #    await tree.sync(guild=discord.Object(id=1144540988753326131))
     print("Ready!")
 
-########## I'm really sorry I don't know how to use classes and can't run this with them ############
+# slash commands under here
 
 @bot.command()
 async def bot_help(ctx):
@@ -49,6 +49,14 @@ async def bot_help(ctx):
                    "\n/test_play \n/play \n/game_help")
     
 @bot.command()
+async def skip(ctx):
+    """adds to skip counter, if 75% of players have used /skip then discussion session ends immediately"""
+
+@bot.command()
+async def kill(ctx):
+    """display select menu of villagers here, kill player with majority/most votes when timer is up"""
+
+@bot.command()
 async def game_help(ctx):
     "presents the rules of the game"
     # await ctx.send("")
@@ -56,7 +64,7 @@ async def game_help(ctx):
 
 @bot.command()
 async def test_play(ctx, arg1 = None, arg2 = None):
-    
+
     if arg1.lower() in ["h", "help"]:
         await ctx.send("Usage: /test_play [total number of players] [number of werewolves]")
         return
