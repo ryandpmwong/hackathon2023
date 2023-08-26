@@ -56,6 +56,10 @@ class Round():
         select = Select(placeholder="Vote for a player to kill", options=options)
         view = View()
         view.add_item(select)
+
+        async def werewolf_callback(interaction):
+            await interaction.response.send_message(f"Werewolf chose: {select_values[0]}")
+            
         await idk.send("Vote for a player to kill", view=view)
 
     def run_night(self):
