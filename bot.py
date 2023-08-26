@@ -4,7 +4,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from dotenv import load_dotenv
-import makeThreads
+from makeThreads import test_threads
 
 import model
 
@@ -22,12 +22,12 @@ class WereWolfBot(commands.Bot):
             return
 
         if message.content == "Make me some threads":
-            bot = makeThreads(channel.id)
-            bot.create_game_threads(channel.id)
+            bot = test_threads(message.channel.id)
+            bot.create_game_threads(message.channel.id)
 
         if message.content == "Delete Werewolf threads":
-            bot = makeThreads(channel.id)
-            bot.delete_game_threads(channel.id)
+            bot = test_threads(message.channel.id)
+            bot.delete_game_threads(message.channel.id)
 
         if message.content == "Hi":
             await message.channel.send("Hello~")
