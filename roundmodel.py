@@ -177,7 +177,7 @@ class Round():
         
         async def everyone_callback(interaction):
             if not self.everyone_timeup:
-                self.everyone_votes[interaction.user.id] = select.values[0]
+                self.everyone_votes[interaction.user] = select.values[0]
                 await self.print_current_all_votes(self.threads['everyone'],
                                                self.everyone_votes)
                 await interaction.response.defer()
