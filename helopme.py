@@ -33,6 +33,7 @@ class MakeButtons(commands.Cog):
         self.button_join = None
         self.button_cancel = None
         self.view = View()
+        self.game_started = False
 
     # async def create_start_prompt(self):
     #     return
@@ -118,6 +119,7 @@ class MakeButtons(commands.Cog):
         message = await interaction.original_response()
         self.reset()
         await message.edit(content="There is no sleep in Ba Sing Se")
+        self.game_started = True
 
     async def button_boring_callback(self, interaction):
         await interaction.response.send_message("Oh. You clicked the other button.")
@@ -145,6 +147,9 @@ class MakeButtons(commands.Cog):
         self.view.add_item(self.button_join)
         self.view.add_item(self.button_start)
         self.view.add_item(self.button_cancel)
+
+    def has_game_started(self):
+        return self.game_started
 
 
 
