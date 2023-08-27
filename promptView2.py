@@ -78,6 +78,29 @@ async def game_help(ctx):
     pass
 
 @bot.command()
+async def create_roles(ctx):
+    guild = ctx.author.guild
+    user = ctx.author
+    #guild = self.client.get_guild(GuildID) # GET GUILD SOMEHOWWW
+    await guild.create_role(name="Alive", permissions=discord.Permissions(permissions=0x0000004000000000)) # Permission Send messages in threads
+    await ctx.send("Alive role created!")
+    role = discord.utils.get(ctx.guild.roles, name="Alive")
+    await user.add_roles(role)
+    await ctx.send(f"Alive role given to {user}!")
+
+@bot.command()
+async def delete_roles(ctx):
+    user = ctx.author
+    guild = ctx.author.guild
+    # OR role = discord.utils.get(ctx.guild.roles, name="Alive") ?
+    role = discord.utils.get(ctx.guild.roles, name="Alive")
+    #await client.add_roles(user, role)
+    await user.remove_roles(role)
+    await ctx.send(f"Alive role taken from {user}!")
+    await role.delete()
+    await ctx.send(f"Alive role taken from guild(?)")
+
+@bot.command()
 async def play_game(ctx, arg1 = None, arg2 = None):
     """Runs on /test_play [num players] [num werewolf]"""
     if arg1 != None and arg1.lower() in ["h", "help"]:
@@ -193,3 +216,5 @@ bot.run(TOKEN)
     @discord.ui.button(label="what is on the button", style=discord.ButtonStyle.gray)
     async def function_name(self, int: discord.Interaction):
         await int.response.send_message("button clicked")"""
+    
+    #member.remove_roles(role)
