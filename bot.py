@@ -29,7 +29,6 @@ class WereWolfBot(commands.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.game_dict = {}
-        self.users = []
 
     async def on_ready(self):
         print(f"{self.user} is ready and on the roll")
@@ -69,7 +68,10 @@ class WereWolfBot(commands.Bot):
             for thread in message.channel.threads:
                 await thread.delete()
 
-        elif message.content == 
+        elif message.content == "List names":
+            for name in message.guild.members:
+                await message.channel.send(name)
+            await message.channel.send("All names given")
         
         # Just is happy to greet you
         elif message.content.lower() in GREETINGS:
