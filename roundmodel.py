@@ -2,7 +2,6 @@ import os
 import asyncio
 import discord
 import random
-#import datetime
 
 from discord.ext import commands
 from discord.ext.commands import Bot
@@ -10,13 +9,11 @@ from discord.ui import Select, View
 from dotenv import load_dotenv
 
 load_dotenv()
-print('1')
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
-print('2')
+
 client = discord.Client(intents=discord.Intents.default())
 bot = Bot(command_prefix='/', intents=discord.Intents.default())
-print('3')
 
 class Round():
     def __init__(self, players):
@@ -195,29 +192,6 @@ class Round():
         else:
             await channel.send(f"You have chosen to eliminate: {self.voted}")
 
-@client.event
-async def on_ready():
-    for guild in client.guilds:
-        if guild.name == GUILD:
-            break
-
-    print(
-        f'{client.user} is connected to the following guild:\n'
-        f'{guild.name}(id: {guild.id})'
-    )
-    await main()
-    #channel = client.get_channel(1144596818995466280)
-    #await thisround.werewolf_select(channel, thisround.werewolf_options)
-
-'''
-def main():
-    bot = commands.Bot(command_prefix='/',intents=discord.Intents.default())
-    print('1')
-    channel = client.get_channel(1144596818995466280)
-    print('2')
-    await channel.send("Hello world!")
-    print('3')
-'''
 async def timer(ctx, seconds):
     time = int(seconds)
     if time >= 60:
@@ -240,18 +214,13 @@ async def timer(ctx, seconds):
                 await message.edit(content=f"Time left: {time}")
             if time <= 0:
                 await message.edit(content="Time's up!")
-                #await ctx.send(f"{ctx.author.mention} Your countdown Has ended!")
                 break
         except:
             break
-    
-async def main():
-    #bot = commands.Bot(command_prefix='/',intents=discord.Intents.default())
-    #print('1')
-    channel = client.get_channel(1144596818995466280)
 
-    #print('2')
-    #await channel.send("Hello world!")
+@client.event
+async def main():
+    channel = client.get_channel(1144596818995466280)
     id_list = [1030359292647321601,
                490790539042619393,
                1122876194665271428,
@@ -268,8 +237,5 @@ async def main():
         TEST_PLAYERS[user_id] = [user,roles[i]]
     this_round = Round(TEST_PLAYERS)
     await this_round.run_night()
-    #print('3')
 
 client.run(TOKEN)
-
-#main()
