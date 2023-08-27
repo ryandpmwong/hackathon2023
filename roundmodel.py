@@ -1,5 +1,6 @@
 '''
 Needs inputs of player objects?? as well as the thread ID's???? and I think that's it???????
+Or should there be a game object where it stores all players and threads n stuff
 
 And should be able to output who died/was eliminated
 
@@ -24,21 +25,20 @@ client = discord.Client(intents=discord.Intents.default())
 bot = Bot(command_prefix='/', intents=discord.Intents.default())
 
 class Round():
-    def __init__(self, players):
+    def __init__(self, players, threads):
         self.attacked = None  # username
         self.protected = None
         self.voted = None
-        self.players = players
+        self.players = players  # a list of player objects????
+        self.threads = threads
         
         self.werewolf_options = self.construct_werewolf_options()
         self.werewolf_votes = {k: None for (k, v) in players.items() if v == 'werewolf'}
-        print(self.werewolf_votes)
         self.ww_votes_message = None
         self.werewolf_timeup = False
 
         self.everyone_options = self.construct_everyone_options()
         self.everyone_votes = {k: None for (k, v) in players.items()}
-        print(self.everyone_votes)
         self.everyone_votes_message = None
         self.everyone_timeup = False
 
@@ -174,7 +174,7 @@ class Round():
         # do stuff depending on what the werewolves voted for
         channel = client.get_channel(1144596818995466280)
         await self.werewolf_select(channel, self.werewolf_options)
-        await timer(channel, 15)
+        await self.timer(channel, 15)
         self.werewolf_timeup = True
         await channel.send("Voting has ended")
         self.attacked = self.get_attacked(self.werewolf_votes)
@@ -186,9 +186,9 @@ class Round():
         channel = client.get_channel(1144596818995466280)
         await channel.send(f"{self.attacked} has been murdered!")
         await channel.send("Discuss who you think is a werewolf. Voting begins at the end of the timer")
-        await timer(channel, 30)
+        await self.timer(channel, 30)
         await self.everyone_select(channel, self.everyone_options)
-        await timer(channel, 30)
+        await self.timer(channel, 30)
         self.everyone_timeup = True
         await channel.send("Voting has ended")
         self.voted = self.get_voted(self.everyone_votes)
@@ -200,31 +200,31 @@ class Round():
         else:
             await channel.send(f"You have chosen to eliminate: {self.voted}")
 
-async def timer(ctx, seconds):
-    time = int(seconds)
-    if time >= 60:
-        seconds_output = str(time%60)
-        if len(seconds_output) == 1:
-            seconds_output = f"0{seconds_output}"
-        message = await ctx.send(f"Time left: {time//60}:{seconds_output}")
-    elif time < 60:
-        message = await ctx.send(f"Time left: {time}")
-    while True:
-        try:
-            await asyncio.sleep(1)
-            time -= 1
-            if time >= 60:
-                seconds_output = str(time%60)
-                if len(seconds_output) == 1:
-                    seconds_output = f"0{seconds_output}"
-                await message.edit(content=f"Time left: {time//60}:{seconds_output}")
-            elif time < 60:
-                await message.edit(content=f"Time left: {time}")
-            if time <= 0:
-                await message.edit(content="Time's up!")
+    async def timer(ctx, seconds):
+        time = int(seconds)
+        if time >= 60:
+            seconds_output = str(time%60)
+            if len(seconds_output) == 1:
+                seconds_output = f"0{seconds_output}"
+            message = await ctx.send(f"Time left: {time//60}:{seconds_output}")
+        elif time < 60:
+            message = await ctx.send(f"Time left: {time}")
+        while True:
+            try:
+                await asyncio.sleep(1)
+                time -= 1
+                if time >= 60:
+                    seconds_output = str(time%60)
+                    if len(seconds_output) == 1:
+                        seconds_output = f"0{seconds_output}"
+                    await message.edit(content=f"Time left: {time//60}:{seconds_output}")
+                elif time < 60:
+                    await message.edit(content=f"Time left: {time}")
+                if time <= 0:
+                    await message.edit(content="Time's up!")
+                    break
+            except:
                 break
-        except:
-            break
 
 @client.event
 async def main():

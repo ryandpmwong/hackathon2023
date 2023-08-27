@@ -15,6 +15,7 @@ import game
 MAKE_THREADS = "Make me some threads"
 CLEAR_THREADS = "Clear all threads"
 GREETINGS = "hi hello good evening good morning good night greeting welcome"
+DISCORD_GUILD = "Hackathon 2023"
 
 
 """users = [async for member in ctx.guild.fetch_members(limit=None):
@@ -55,9 +56,12 @@ class WereWolfBot(commands.Bot):
         ###### BEGINNING OF GAME - MAKE THE THREADS #######
         if message.content == MAKE_THREADS:
             # It makes a new game, importing from game.py, giving the channel and who wrote the message
-            
+            for name in message.guild.members:
+                print(name)
             new_game = game.WerewolfGame(message.channel, message.author)
             # Creates new threads
+            # so if we did something like    threads = await new_game.create_game_threads()
+            # then the variable "threads" can be passed back to GameModel???
             await new_game.create_game_threads()
 
         # Thread clearing (clears all the threads in a channel)
