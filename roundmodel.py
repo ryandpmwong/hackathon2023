@@ -201,10 +201,9 @@ class Round():
         # do stuff depending on what the werewolves voted for
         print('Night start')
         ww_thread = self.threads['werewolves']
-        await ww_thread.send('tseta')
         await self.werewolf_select(ww_thread, self.werewolf_options)
         print("sent select to werewolf")
-        await self.timer(ww_thread, 15)
+        await self.timer(ww_thread, 60)
         print("count down for werewolf")
         self.werewolf_timeup = True
         await ww_thread.send("Voting has ended")
@@ -221,7 +220,7 @@ class Round():
         all_thread = self.threads['everyone']
         await all_thread.send(f"{self.attacked} has been murdered!")
         await all_thread.send("Discuss who you think is a werewolf. Voting begins at the end of the timer")
-        await self.timer(all_thread, 30)
+        await self.timer(all_thread, 90)
         await self.everyone_select(all_thread, self.everyone_options)
         await self.timer(all_thread, 30)
         self.everyone_timeup = True
