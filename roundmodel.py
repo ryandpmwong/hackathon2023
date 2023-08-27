@@ -29,16 +29,16 @@ class Round():
         self.attacked = None  # username
         self.protected = None
         self.voted = None
-        self.players = players  # a list of player objects????
-        self.threads = threads
+        self.players = players  # a list of player objects
+        self.threads = threads  # dict of for {'everyone' 'werewolves': Thread object}
         
         self.werewolf_options = self.construct_werewolf_options()
-        self.werewolf_votes = {k: None for (k, v) in players.items() if v == 'werewolf'}
+        self.werewolf_votes = {k.user.id: None for (k, v) in players.items() if v == 'werewolf'}
         self.ww_votes_message = None
         self.werewolf_timeup = False
 
         self.everyone_options = self.construct_everyone_options()
-        self.everyone_votes = {k: None for (k, v) in players.items()}
+        self.everyone_votes = {k.user.id: None for (k, v) in players.items()}
         self.everyone_votes_message = None
         self.everyone_timeup = False
 
@@ -86,7 +86,7 @@ class Round():
         async def werewolf_callback(interaction):
             if not self.werewolf_timeup:
                 self.werewolf_votes[interaction.user.id] = select.values[0]
-                await self.print_current_ww_votes(client.get_channel(1144596818995466280),
+                await self.print_current_ww_votes(self.threads['werewolves'],
                                                self.werewolf_votes)
                 await interaction.response.defer()
         select.callback = werewolf_callback
@@ -151,7 +151,7 @@ class Round():
         async def everyone_callback(interaction):
             if not self.everyone_timeup:
                 self.everyone_votes[interaction.user.id] = select.values[0]
-                await self.print_current_all_votes(client.get_channel(1144596818995466280),
+                await self.print_current_all_votes(self.threads['everyone'],
                                                self.everyone_votes)
                 await interaction.response.defer()
         select.callback = everyone_callback
@@ -172,33 +172,33 @@ class Round():
         # type "Start of night [night_number]:" in the werewolf channel
         # put the werewolf select in the werewolf channel
         # do stuff depending on what the werewolves voted for
-        channel = client.get_channel(1144596818995466280)
-        await self.werewolf_select(channel, self.werewolf_options)
-        await self.timer(channel, 15)
+        ww_thread = self.threads['werewolves']
+        await self.werewolf_select(ww_thread, self.werewolf_options)
+        await self.timer(ww_thread, 15)
         self.werewolf_timeup = True
-        await channel.send("Voting has ended")
+        await ww_thread.send("Voting has ended")
         self.attacked = self.get_attacked(self.werewolf_votes)
         print(self.werewolf_votes)
-        await channel.send(f"You have chosen to kill: {self.attacked}")
+        await ww_thread.send(f"You have chosen to kill: {self.attacked}")
         await self.run_day()
 
     async def run_day(self):
-        channel = client.get_channel(1144596818995466280)
-        await channel.send(f"{self.attacked} has been murdered!")
-        await channel.send("Discuss who you think is a werewolf. Voting begins at the end of the timer")
-        await self.timer(channel, 30)
-        await self.everyone_select(channel, self.everyone_options)
-        await self.timer(channel, 30)
+        all_thread = self.threads['everyone']
+        await all_thread.send(f"{self.attacked} has been murdered!")
+        await all_thread.send("Discuss who you think is a werewolf. Voting begins at the end of the timer")
+        await self.timer(all_thread, 30)
+        await self.everyone_select(all_thread, self.everyone_options)
+        await self.timer(all_thread, 30)
         self.everyone_timeup = True
-        await channel.send("Voting has ended")
+        await all_thread.send("Voting has ended")
         self.voted = self.get_voted(self.everyone_votes)
         print(self.everyone_votes)
         if self.voted == 'Tie':
-            await channel.send("Tie detected! Skipping elimination this round.")
+            await all_thread.send("Tie detected! Skipping elimination this round.")
         elif self.voted == 'Skip':
-            await channel.send("You have chosen to skip elimination this round.")
+            await all_thread.send("You have chosen to skip elimination this round.")
         else:
-            await channel.send(f"You have chosen to eliminate: {self.voted}")
+            await all_thread.send(f"You have chosen to eliminate: {self.voted}")
 
     async def timer(ctx, seconds):
         time = int(seconds)
@@ -226,6 +226,7 @@ class Round():
             except:
                 break
 
+'''
 @client.event
 async def main():
     channel = client.get_channel(1144596818995466280)
@@ -247,3 +248,4 @@ async def main():
     await this_round.run_night()
 
 client.run(TOKEN)
+'''
