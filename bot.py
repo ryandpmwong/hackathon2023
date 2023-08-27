@@ -59,7 +59,6 @@ class WereWolfBot(commands.Bot):
             for name in message.guild.members:
                 if name.bot == False:
                     users.append(name)
-            print(users)
             new_game = game.WerewolfGame(message.channel, users)
             print('made new game')
             # Creates new threads
@@ -69,7 +68,7 @@ class WereWolfBot(commands.Bot):
             print("hello")
             await new_game.generate_players(users)
             print('seems to work up to here')
-            await new_game.run_game()
+            await message.channel.send(await new_game.run_game())
 
         # Thread clearing (clears all the threads in a channel)
         elif message.content == CLEAR_THREADS:

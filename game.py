@@ -39,7 +39,6 @@ class WerewolfGame:
         self.channel = channel
         self.users = users
         self.players = []
-        # self.generate_players(users)
 
         self.players = []  # will be a list of player objects (probably)
         self.ID = WerewolfGame.ID
@@ -142,10 +141,7 @@ class WerewolfGame:
         while new_round.get_game_result() is None:
             new_round = Round(self.players, self.threads)
             await new_round.run_night()
-        # game has ended
-        # output a message depending on game_result()
+        return new_round.get_game_result()
 
-    def is_game_over(self):
-        pass
 
 
