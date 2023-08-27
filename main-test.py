@@ -24,7 +24,7 @@ async def main():
         intents=intents
     )
     cogs = [
-        'helopme',
+        'startgame',
         'play'
     ]
 

@@ -15,9 +15,11 @@ import game
 MAKE_THREADS = "Make me some threads"
 CLEAR_THREADS = "Clear all threads"
 GREETINGS = "hi hello good evening good morning good night greeting welcome"
+DISCORD_GUILD = "Hackathon 2023"
 
 
-
+"""users = [async for member in ctx.guild.fetch_members(limit=None):
+            print("{},{}".format(member,member.id), file=f,)]"""
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -27,6 +29,7 @@ class WereWolfBot(commands.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.game_dict = {}
+        self.users = []
 
     async def on_ready(self):
         print(f"{self.user} is ready and on the roll")
@@ -34,10 +37,12 @@ class WereWolfBot(commands.Bot):
         print('Synced tree')
 
     async def on_message(self, message):
+        # If the author is a bot, do not do anything
         if message.author.bot:
             return
 
         if message.channel.name == 'testing' and not message.author.bot:
+            # If the channel's name is testing and the author is not a bot:
             await message.channel.send(f"{message.author} has send a message: {message.content}")
             await self.handle_responses(message)
 
@@ -45,16 +50,26 @@ class WereWolfBot(commands.Bot):
 
 
     async def handle_responses(self, message):
+        # Gets what the content of the message is
         print(message.content)
+        # If it is the Make threads message
+        ###### BEGINNING OF GAME - MAKE THE THREADS #######
         if message.content == MAKE_THREADS:
-            #replace message.author with list of players
+            # It makes a new game, importing from game.py, giving the channel and who wrote the message
+            for name in message.guild.members:
+                print(name)
             new_game = game.WerewolfGame(message.channel, message.author)
+            # Creates new threads
             # so if we did something like    threads = await new_game.create_game_threads()
             # then the variable "threads" can be passed back to GameModel???
             await new_game.create_game_threads()
+
+        # Thread clearing (clears all the threads in a channel)
         elif message.content == CLEAR_THREADS:
             for thread in message.channel.threads:
                 await thread.delete()
+        
+        # Just is happy to greet you
         elif message.content.lower() in GREETINGS:
             await message.channel.send(message.content + '~')
         else:
