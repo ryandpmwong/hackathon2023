@@ -48,6 +48,8 @@ class WereWolfBot(commands.Bot):
         print(message.content)
         if message.content == MAKE_THREADS:
             new_game = game.WerewolfGame(message.channel, message.author)
+            # so if we did something like    threads = await new_game.create_game_threads()
+            # then the variable "threads" can be passed back to GameModel???
             await new_game.create_game_threads()
         elif message.content == CLEAR_THREADS:
             for thread in message.channel.threads:
