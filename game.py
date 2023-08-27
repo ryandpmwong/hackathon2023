@@ -131,8 +131,10 @@ class WerewolfGame:
 
     async def run_game(self):
         new_round = Round(self.players, self.threads)
-        while new_round.game_result() is None:
+        await new_round.run_night()
+        while new_round.get_game_result() is None:
             new_round = Round(self.players, self.threads)
+            await new_round.run_night()
         # game has ended
         # output a message depending on game_result()
 
