@@ -42,8 +42,25 @@ class WereWolfBot(commands.Bot):
 
         if message.channel.name == 'testing' and not message.author.bot:
             # If the channel's name is testing and the author is not a bot:
-            await message.channel.send(f"{message.author} has send a message: {message.content}")
-            await self.handle_responses(message)
+            #await message.channel.send(f"{message.author} has send a message: {message.content}")
+            #await self.handle_responses(message)
+            insult = f"The *better* were-bot: {message.author} sent '"
+            # insert inefficient code here
+            words_sent = (message.content).split(" ")
+            for word in words_sent:
+                new_word = ""
+                for letter_num, letter in enumerate(word):
+                    if letter_num % 2 == 1:
+                        letter = letter.upper()
+                    else:
+                        letter = letter.lower()
+                    new_word += letter
+                if word == words_sent[-1]:
+                    insult = insult + new_word + "'"
+                else:
+                    insult = insult + new_word + " "
+                    
+            await message.channel.send(insult)
 
 
 
