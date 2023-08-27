@@ -57,7 +57,6 @@ class Player:
     def __init__(self, user: discord.User):
         self.user = user
         self.alive = True
-        pass
 
     def get_user(self):
         return self.user

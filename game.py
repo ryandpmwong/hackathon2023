@@ -75,6 +75,7 @@ class WerewolfGame:
                                                  type=discord.ChannelType.private_thread,
                                                  invitable=False)
         self.threads['ghost'] = ghost
+        return
 
     async def generate_players(self, users: list[discord.User]):
         """
@@ -82,11 +83,14 @@ class WerewolfGame:
         :param users: discord.User, users who have joined the game.
         :return: None
         """
-        werewolves = await sample(users, self.werewolf_num)
+        werewolves = sample(users, self.werewolf_num)
+        print(werewolves, 'were')
         for wolf in werewolves:
             await self.allocate_role(wolf, self.threads['werewolves'], 'werewolves')
         for user in users:
-            await self.allocate_role(user, self.threads['everyone'], 'everyone')
+            await self.allocate_role(user, self.threads['everyone'], 'villager')
+        print(self.players, 'from game.py')
+        return
 
 
     async def get_threads(self):
@@ -101,9 +105,9 @@ class WerewolfGame:
         :return:
         """
         if player_type == 'villager':
-            await self.players.append(model.Villager(user))
+            self.players.append(model.Villager(user))
         elif player_type == 'werewolf':
-            await self.players.append(model.Werewolf(user))
+            self.players.append(model.Werewolf(user))
         await thread.add_user(user)
 
 
@@ -130,15 +134,20 @@ class WerewolfGame:
         # vote'''
 
     async def run_game(self):
+        print('start run game')
+        print('players', self.players)
         new_round = Round(self.players, self.threads)
+        print('start new round')
         await new_round.run_night()
+        print('night')
         while new_round.get_game_result() is None:
             new_round = Round(self.players, self.threads)
             await new_round.run_night()
         # game has ended
         # output a message depending on game_result()
 
-    def is_game_over(self) -> bool or str:
+    def is_game_over(self):
         pass
+
 
 
