@@ -47,6 +47,7 @@ class WereWolfBot(commands.Bot):
     async def handle_responses(self, message):
         print(message.content)
         if message.content == MAKE_THREADS:
+            #replace message.author with list of players
             new_game = game.WerewolfGame(message.channel, message.author)
             # so if we did something like    threads = await new_game.create_game_threads()
             # then the variable "threads" can be passed back to GameModel???
