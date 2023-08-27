@@ -55,9 +55,11 @@ class WereWolfBot(commands.Bot):
         ###### BEGINNING OF GAME - MAKE THE THREADS #######
         if message.content == MAKE_THREADS:
             # It makes a new game, importing from game.py, giving the channel and who wrote the message
+            users = []
             for name in message.guild.members:
-                print(name)
-            new_game = game.WerewolfGame(message.channel, message.author)
+                if not name.bot:
+                    users.append(name)
+            new_game = game.WerewolfGame(message.channel, users)
             # Creates new threads
             # so if we did something like    threads = await new_game.create_game_threads()
             # then the variable "threads" can be passed back to GameModel???
