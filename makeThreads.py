@@ -1,6 +1,9 @@
 import discord
 import asyncio
 
+# This class, test_threads, is imported to bot.py as part of the main WerewolfBot functionality.
+# It creates the threads in the channels.
+
 class test_threads:
 
     def __init__(self, channel, author):

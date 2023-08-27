@@ -3,6 +3,8 @@ from discord import app_commands
 from discord.ext import commands
 import bot
 
+# This code is for testing purposes and is not functional.
+
 class Play(commands.Cog):
     def __init__(self, bot:commands.Bot):
         self.bot = bot

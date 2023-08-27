@@ -6,6 +6,9 @@ import discord.ext
 from dotenv import load_dotenv
 import os
 
+# promptView2.py
+# Intended to merge with other files, kept in case new files become buggy so rollback of changes can occur.
+
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
@@ -46,9 +49,33 @@ async def on_ready():
     print("Ready!")
 
 ########## I'm really sorry I don't know how to use classes and can't run this with them ############
+
+# global variables are not functional.
 global num_players_global_blasphemy
 num_players_global_blasphemy = 0
 global players_joined_message
+
+# slash commands under here
+
+@bot.command()
+async def bot_help(ctx):
+    """displays a list of available commands to the user"""
+    await ctx.send("Here is a list of commands use can use. Type /[command] help for more info."
+                   "\n/test_play \n/play \n/game_help")
+    
+@bot.command()
+async def skip(ctx):
+    """adds to skip counter, if 75% of players have used /skip then discussion session ends immediately"""
+
+@bot.command()
+async def kill(ctx):
+    """display select menu of villagers here, kill player with majority/most votes when timer is up"""
+
+@bot.command()
+async def game_help(ctx):
+    "presents the rules of the game"
+    # await ctx.send("")
+    pass
 
 @bot.command()
 async def play_game(ctx, arg1 = None, arg2 = None):
