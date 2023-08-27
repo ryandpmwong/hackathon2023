@@ -39,7 +39,7 @@ class WerewolfGame:
         self.channel = channel
         self.users = users
         self.players = []
-        self.generate_players(users)
+        # self.generate_players(users)
 
         self.players = []  # will be a list of player objects (probably)
         self.ID = WerewolfGame.ID
