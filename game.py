@@ -2,7 +2,7 @@ import collections.abc
 
 import discord
 import model
-from discordbottest import Round
+from roundmodel import Round
 import asyncio
 from collections import abc
 from random import sample
