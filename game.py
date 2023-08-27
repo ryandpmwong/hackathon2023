@@ -25,16 +25,21 @@ class WerewolfGame:
     ID = 0
     GAMES = {}
 
-    def __init__(self, channel, users):
+    def __init__(self, channel, users, werewolves_num = None):
         """
         :param channel: the channel the game belongs in
         :param players: list of users
         """
-        self.villager_num = 0
-        self.werewolf_num = 0
+        
+        if werewolves_num is not None:
+            self.werewolf_num = werewolves_num
+        else:
+            self.werewolf_num = math.ceil(len(users) / 3.5)
+        self.villager_num = len(users) - self.werewolf_num
         self.channel = channel
         self.users = users
-        # self.players = self.generate_players(users)
+        self.players = []
+        self.generate_players(users)
 
         self.players = []  # will be a list of player objects (probably)
         self.ID = WerewolfGame.ID
@@ -55,21 +60,21 @@ class WerewolfGame:
         """
         game_id = f"Game {self.ID}: "
         # create villager thread
-        villagers = await self.channel.create_thread(name=game_id + "Village Talk",
+        everyone = await self.channel.create_thread(name=game_id + "Village Talk",
                                                      type=discord.ChannelType.private_thread,
                                                      invitable=False)
-        self.threads[villagers] = []
+        self.threads['everyone'] = everyone
         werewolf = await self.channel.create_thread(name=game_id + "Werewolf Chat",
                                                     type=discord.ChannelType.private_thread,
                                                     invitable=False)
-        self.threads[werewolf] = []
+        self.threads['werewolves'] = werewolf
         """
         """
 
         ghost = await self.channel.create_thread(name=game_id + "Ghost Chat",
                                                  type=discord.ChannelType.private_thread,
                                                  invitable=False)
-        self.threads[ghost] = []
+        self.threads['ghost'] = ghost
 
     async def generate_players(self, users: list[discord.User]):
         """
@@ -77,14 +82,11 @@ class WerewolfGame:
         :param users: discord.User, users who have joined the game.
         :return: None
         """
-
-        self.werewolf_num = len(users) - math.ceil(len(users) / 3.5)
-        werewolves = sample(users, self.villager_num)
+        werewolves = sample(users, self.werewolf_num)
         for wolf in werewolves:
-            await self.allocate_role(wolf, self.threads[1], 'werewolf')
+            await self.allocate_role(wolf, self.threads['werewolves'], 'werewolves')
         for user in users:
-            if user not in werewolves:
-                await self.allocate_role(user, self.threads[0], 'villager')
+            await self.allocate_role(user, self.threads['everyone'], 'everyone')
 
 
     async def get_threads(self):
@@ -99,10 +101,11 @@ class WerewolfGame:
         :return:
         """
         if player_type == 'villager':
-            self.threads[thread].append(model.Villager(user))
+            self.players.append(model.Villager(user))
         elif player_type == 'werewolf':
-            self.threads[thread].append(model.Werewolf(user))
+            self.players.append(model.Werewolf(user))
         await thread.add_user(user)
+
 
 
     async def deallocate_role(self, user, thread: discord.Thread):
@@ -121,10 +124,10 @@ class WerewolfGame:
         if self.is_day:
             pass
 
-    async def werewolf_round(self):
+    '''async def werewolf_round(self):
         for user in self.threads[1]:
             await self.allocate_role(user, list(self.threads.keys())[1], 'werewolf')
-        # vote
+        # vote'''
 
     async def run_game(self):
         new_round = Round(self.players, self.threads)
