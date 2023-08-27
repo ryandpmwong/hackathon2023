@@ -42,6 +42,12 @@ class Round():
         self.everyone_votes_message = None
         self.everyone_timeup = False
 
+    def get_player(self, username):
+        '''Assumes there are no two players with the same username but i think thats a given anyway'''
+        for player in self.players:
+            if player.get_user().name == username:
+                return player
+
     def construct_werewolf_options(self) -> list:
         options = []
         for player in self.players:
