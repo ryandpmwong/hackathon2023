@@ -85,7 +85,8 @@ class WerewolfGame:
         print(werewolves, 'were')
         for user in users:
             if user in werewolves:
-                await self.allocate_role(wolf, self.threads['werewolves'], 'werewolves')
+                await self.allocate_role(user, self.threads['werewolves'], 'werewolves')
+                await self.allocate_role(user, self.threads['everyone'], None)
             else:
                 await self.allocate_role(user, self.threads['everyone'], 'villager')
         print(self.players, 'from game.py')
@@ -103,6 +104,8 @@ class WerewolfGame:
         :param player_type:
         :return:
         """
+        if player_type is None:
+            self.threads['everyone'].add_user(user)
         if player_type == 'villager':
             self.players.append(model.Villager(user))
         elif player_type == 'werewolf':
