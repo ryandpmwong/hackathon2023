@@ -1,3 +1,11 @@
+'''
+Needs inputs of player objects?? as well as the thread ID's???? and I think that's it???????
+
+And should be able to output who died/was eliminated
+
+(technically none of the above works properly but I'll get to it)
+'''
+
 import os
 import asyncio
 import discord
