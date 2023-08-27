@@ -66,6 +66,7 @@ class WereWolfBot(commands.Bot):
             # then the variable "threads" can be passed back to GameModel???
             await new_game.create_game_threads()
             await new_game.generate_players(users)
+            await new_game.run_game()
 
         # Thread clearing (clears all the threads in a channel)
         elif message.content == CLEAR_THREADS:
