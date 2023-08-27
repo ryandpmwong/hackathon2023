@@ -57,8 +57,9 @@ class WereWolfBot(commands.Bot):
             # It makes a new game, importing from game.py, giving the channel and who wrote the message
             users = []
             for name in message.guild.members:
-                if not name.bot:
+                if name.bot == False:
                     users.append(name)
+            print(users)
             new_game = game.WerewolfGame(message.channel, users)
             # Creates new threads
             # so if we did something like    threads = await new_game.create_game_threads()
