@@ -123,6 +123,13 @@ class WerewolfGame:
             await self.allocate_role(user, list(self.threads.keys())[1], 'werewolf')
         # vote
 
+    async def run_game(self):
+        new_round = Round(self.players, self.threads)
+        while new_round.game_result() is None:
+            new_round = Round(self.players, self.threads)
+        # game has ended
+        # output a message depending on game_result()
+
     def is_game_over(self) -> bool or str:
         pass
 
