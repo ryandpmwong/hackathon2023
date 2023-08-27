@@ -198,6 +198,9 @@ class Round():
         else:
             await all_thread.send(f"You have chosen to eliminate: {self.voted}")
 
+    def game_result(self):
+        return 'Werewolves win'
+
     async def timer(ctx, seconds):
         time = int(seconds)
         if time >= 60:
