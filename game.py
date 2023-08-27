@@ -83,10 +83,11 @@ class WerewolfGame:
         """
         werewolves = sample(users, self.werewolf_num)
         print(werewolves, 'were')
-        for wolf in werewolves:
-            await self.allocate_role(wolf, self.threads['werewolves'], 'werewolves')
         for user in users:
-            await self.allocate_role(user, self.threads['everyone'], 'villager')
+            if user in werewolves:
+                await self.allocate_role(wolf, self.threads['werewolves'], 'werewolves')
+            else:
+                await self.allocate_role(user, self.threads['everyone'], 'villager')
         print(self.players, 'from game.py')
         return
 
