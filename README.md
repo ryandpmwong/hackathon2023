@@ -7,4 +7,6 @@ The Were-bot is a discord bot that allows you to play the werewolf game (aka maf
 
 ## List of commands
 
+
 ## How does the game work?
+

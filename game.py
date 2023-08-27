@@ -15,6 +15,8 @@ Inform me on discord when modifying this file OR DDIIIIIE
 
 WELCOME_MESSAGE = "Welcome to WereWolf!"
 
+#dummy list of players
+dummy_players = ["player1", "player2", "player3", "player4"]
 
 class WerewolfGame:
     ID = 0
@@ -122,4 +124,5 @@ class WerewolfGame:
 
     def is_game_over(self) -> bool or str:
         pass
+
 
