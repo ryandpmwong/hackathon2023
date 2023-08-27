@@ -42,6 +42,8 @@ class Round():
         self.everyone_votes = {k.get_user(): None for k in players}
         self.everyone_votes_message = None
         self.everyone_timeup = False
+        
+        print('Round init done')
 
     def get_player(self, username):
         '''Assumes there are no two players with the same username but i think thats a given anyway'''
@@ -184,6 +186,7 @@ class Round():
         # type "Start of night [night_number]:" in the werewolf channel
         # put the werewolf select in the werewolf channel
         # do stuff depending on what the werewolves voted for
+        print('Night start')
         ww_thread = self.threads['werewolves']
         await self.werewolf_select(ww_thread, self.werewolf_options)
         await self.timer(ww_thread, 15)
