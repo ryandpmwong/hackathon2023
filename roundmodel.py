@@ -31,6 +31,7 @@ class Round():
         self.voted = None
         self.players = players  # a list of player objects
         self.threads = threads  # dict of for {'everyone' 'werewolves': Thread object}
+        self.game_result = None
         
         self.werewolf_options = self.construct_werewolf_options()
         self.werewolf_votes = {k.get_user(): None for k in players if k.get_side() == 'Bad'}
@@ -41,6 +42,8 @@ class Round():
         self.everyone_votes = {k.get_user(): None for k in players}
         self.everyone_votes_message = None
         self.everyone_timeup = False
+        
+        print('Round init done')
 
     def get_player(self, username):
         '''Assumes there are no two players with the same username but i think thats a given anyway'''
@@ -48,15 +51,30 @@ class Round():
             if player.get_user().name == username:
                 return player
 
+    def update_game_result(self):
+        print('update_game_result')
+        sides = [player.get_side() for player in self.players if player.is_alive()]
+        if sides.count('Bad') >= sides.count('Good'):
+            self.game_result = 'Werewolves win'
+        elif sides.count('Bad') == 0:
+            self.game_result = 'Villagers win'
+    
     def construct_werewolf_options(self) -> list:
+        print('contructing werewolf options')
         options = []
+        print('aaaaaaa')
+        print(self.players)
         for player in self.players:
+            user = player.get_user()
+            print(player.get_user().name)
+
             if player.get_side() != 'Bad' and player.is_alive():
-                user = player.get_user()
+                print(user.name)
                 options.append(discord.SelectOption(label=user.name, description='Vote to kill ' + user.name))
         return options
 
     async def print_current_ww_votes(self, channel, votes):
+        print('generating current votes')
         cv_message = "Current votes:"
         for voter in votes:
             if votes[voter] is not None:
@@ -68,6 +86,7 @@ class Round():
             await self.ww_votes_message.edit(content=cv_message)
 
     def get_attacked(self, votes):
+        print('going to be attacked')
         voted_players = list(votes.values())
         for voted_player in voted_players:
             if voted_player is None or voted_player != voted_players[0]:
@@ -75,16 +94,16 @@ class Round():
                 filtered_list = list(filter(lambda x: x is not None, voted_players))
                 if len(filtered_list) == 0:
                     #no one voted for a thingo
-                    return random.choice([x for x in self.players if player.get_side() != 'Bad' and player.is_alive()])
+                    return random.choice([player for player in self.players if player.get_side() != 'Bad' and player.is_alive()])
                 else:
                     return random.choice(list(set(filtered_list)))
         return voted_players[0]
 
     async def werewolf_select(self, idk, options):
-        #print("ww_select start")
+        print("ww_select start")
         select = Select(placeholder="Vote for a player to kill", options=options)
         
-        #print("yep")
+        print("yep")
         
         
         async def werewolf_callback(interaction):
@@ -96,8 +115,11 @@ class Round():
         select.callback = werewolf_callback
 
         view = View()
+
         view.add_item(select)
-        
+        print('finished constructing select view')
+        print(view)
+        await idk.send("Vote ps")
         await idk.send("Vote for a player to kill", view=view)
 
 
@@ -105,6 +127,7 @@ class Round():
 
 
     def construct_everyone_options(self) -> list:
+        print('contructing options')
         options = []
         try:
             for player in self.players:
@@ -176,15 +199,23 @@ class Round():
         # type "Start of night [night_number]:" in the werewolf channel
         # put the werewolf select in the werewolf channel
         # do stuff depending on what the werewolves voted for
+        print('Night start')
         ww_thread = self.threads['werewolves']
+        await ww_thread.send('tseta')
         await self.werewolf_select(ww_thread, self.werewolf_options)
+        print("sent select to werewolf")
         await self.timer(ww_thread, 15)
+        print("count down for werewolf")
         self.werewolf_timeup = True
         await ww_thread.send("Voting has ended")
         self.attacked = self.get_attacked(self.werewolf_votes)
-        print(self.werewolf_votes)
         await ww_thread.send(f"You have chosen to kill: {self.attacked}")
-        await self.run_day()
+        self.get_player(self.attacked).kill()
+        self.update_game_result()
+        if self.game_result == 'Werewolves win':
+            pass
+        else:
+            await self.run_day()
 
     async def run_day(self):
         all_thread = self.threads['everyone']
@@ -196,18 +227,19 @@ class Round():
         self.everyone_timeup = True
         await all_thread.send("Voting has ended")
         self.voted = self.get_voted(self.everyone_votes)
-        print(self.everyone_votes)
         if self.voted == 'Tie':
             await all_thread.send("Tie detected! Skipping elimination this round.")
         elif self.voted == 'Skip':
             await all_thread.send("You have chosen to skip elimination this round.")
         else:
             await all_thread.send(f"You have chosen to eliminate: {self.voted}")
+            self.get_player(self.voted).kill()
+            self.update_game_result()
 
-    def game_result(self):
-        return 'Werewolves win'
+    def get_game_result(self):
+        return self.game_result
 
-    async def timer(ctx, seconds):
+    async def timer(self, ctx, seconds): # bot
         time = int(seconds)
         if time >= 60:
             seconds_output = str(time%60)

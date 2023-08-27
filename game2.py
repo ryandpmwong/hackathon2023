@@ -83,13 +83,10 @@ class WerewolfGame:
         :return: None
         """
         werewolves = sample(users, self.werewolf_num)
-        print(werewolves, 'were')
         for wolf in werewolves:
             await self.allocate_role(wolf, self.threads['werewolves'], 'werewolves')
         for user in users:
-            await self.allocate_role(user, self.threads['everyone'], 'villager')
-        print(self.players, 'from game.py')
-        return
+            await self.allocate_role(user, self.threads['everyone'], 'everyone')
 
 
     async def get_threads(self):
@@ -104,9 +101,9 @@ class WerewolfGame:
         :return:
         """
         if player_type == 'villager':
-            self.players.append(model.Villager(user))
+            await self.players.append(model.Villager(user))
         elif player_type == 'werewolf':
-            self.players.append(model.Werewolf(user))
+            await self.players.append(model.Werewolf(user))
         await thread.add_user(user)
 
 
@@ -133,19 +130,11 @@ class WerewolfGame:
         # vote'''
 
     async def run_game(self):
-        print('start run game')
-        print('players', self.players)
         new_round = Round(self.players, self.threads)
-        print('start new round')
         await new_round.run_night()
-        print('night')
         while new_round.get_game_result() is None:
             new_round = Round(self.players, self.threads)
             await new_round.run_night()
-        # game has ended
-        # output a message depending on game_result()
-
-    def is_game_over(self):
-        pass
+        return new_round.get_game_result()
 
 

@@ -59,17 +59,15 @@ class WereWolfBot(commands.Bot):
             for name in message.guild.members:
                 if name.bot == False:
                     users.append(name)
-            print(users)
             new_game = game.WerewolfGame(message.channel, users)
-            print('made new game')
             # Creates new threads
             # so if we did something like    threads = await new_game.create_game_threads()
             # then the variable "threads" can be passed back to GameModel???
             await new_game.create_game_threads()
-            print("hello")
             await new_game.generate_players(users)
-            print('seems to work up to here')
-            await new_game.run_game()
+            await message.channel.send(await new_game.run_game())
+            #game_result = await new_game.run_game()
+            #message.channel.send(game_result)
 
         # Thread clearing (clears all the threads in a channel)
         elif message.content == CLEAR_THREADS:
