@@ -31,6 +31,7 @@ class Round():
         self.voted = None
         self.players = players  # a list of player objects
         self.threads = threads  # dict of for {'everyone' 'werewolves': Thread object}
+        self.game_result = None
         
         self.werewolf_options = self.construct_werewolf_options()
         self.werewolf_votes = {k.get_user(): None for k in players if k.get_side() == 'Bad'}
@@ -48,6 +49,13 @@ class Round():
             if player.get_user().name == username:
                 return player
 
+    def update_game_result(self):
+        sides = [player.get_side() for player in self.players if player.is_alive()]
+        if sides.count('Bad') >= sides.count('Good'):
+            self.game_result = 'Werewolves win'
+        elif sides.count('Bad') == 0:
+            self.game_result = 'Villagers win'
+    
     def construct_werewolf_options(self) -> list:
         options = []
         for player in self.players:
@@ -182,9 +190,13 @@ class Round():
         self.werewolf_timeup = True
         await ww_thread.send("Voting has ended")
         self.attacked = self.get_attacked(self.werewolf_votes)
-        print(self.werewolf_votes)
         await ww_thread.send(f"You have chosen to kill: {self.attacked}")
-        await self.run_day()
+        self.get_player(self.attacked).kill()
+        self.update_game_result()
+        if self.game_result == 'Werewolves win':
+            pass
+        else:
+            await self.run_day()
 
     async def run_day(self):
         all_thread = self.threads['everyone']
@@ -196,16 +208,17 @@ class Round():
         self.everyone_timeup = True
         await all_thread.send("Voting has ended")
         self.voted = self.get_voted(self.everyone_votes)
-        print(self.everyone_votes)
         if self.voted == 'Tie':
             await all_thread.send("Tie detected! Skipping elimination this round.")
         elif self.voted == 'Skip':
             await all_thread.send("You have chosen to skip elimination this round.")
         else:
             await all_thread.send(f"You have chosen to eliminate: {self.voted}")
+            self.get_player(self.voted).kill()
+            self.update_game_result()
 
-    def game_result(self):
-        return 'Werewolves win'
+    def get_game_result(self):
+        return self.game_result
 
     async def timer(ctx, seconds):
         time = int(seconds)
