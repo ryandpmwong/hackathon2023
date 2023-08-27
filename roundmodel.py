@@ -25,11 +25,12 @@ client = discord.Client(intents=discord.Intents.default())
 bot = Bot(command_prefix='/', intents=discord.Intents.default())
 
 class Round():
-    def __init__(self, players):
+    def __init__(self, players, threads):
         self.attacked = None  # username
         self.protected = None
         self.voted = None
-        self.players = players
+        self.players = players  # a list of player objects????
+        self.threads = threads
         
         self.werewolf_options = self.construct_werewolf_options()
         self.werewolf_votes = {k: None for (k, v) in players.items() if v == 'werewolf'}
