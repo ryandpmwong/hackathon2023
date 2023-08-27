@@ -1,5 +1,6 @@
 '''
 Needs inputs of player objects?? as well as the thread ID's???? and I think that's it???????
+Or should there be a game object where it stores all players and threads n stuff
 
 And should be able to output who died/was eliminated
 
@@ -32,13 +33,11 @@ class Round():
         
         self.werewolf_options = self.construct_werewolf_options()
         self.werewolf_votes = {k: None for (k, v) in players.items() if v == 'werewolf'}
-        print(self.werewolf_votes)
         self.ww_votes_message = None
         self.werewolf_timeup = False
 
         self.everyone_options = self.construct_everyone_options()
         self.everyone_votes = {k: None for (k, v) in players.items()}
-        print(self.everyone_votes)
         self.everyone_votes_message = None
         self.everyone_timeup = False
 
