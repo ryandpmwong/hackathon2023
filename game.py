@@ -30,6 +30,7 @@ class WerewolfGame:
         self.villager_num = 0
         self.werewolf_num = 0
         self.channel = channel
+        self.users = users
         # self.players = self.generate_players(users)
 
         self.players = []  # will be a list of player objects (probably)

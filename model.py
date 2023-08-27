@@ -1,8 +1,8 @@
-import math
-import random
+#import math
+#import random
 
 import discord
-
+'''
 
 class GameModel:
     """
@@ -45,7 +45,7 @@ class GameModel:
                 if player not in players_info:
                     players_info[player] = 'villager'
         return players_info
-
+'''
 
 class Player:
     """
