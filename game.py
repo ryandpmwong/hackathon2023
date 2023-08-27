@@ -82,7 +82,7 @@ class WerewolfGame:
         :param users: discord.User, users who have joined the game.
         :return: None
         """
-        werewolves = await sample(users, self.werewolf_num)
+        werewolves = sample(users, self.werewolf_num)
         for wolf in werewolves:
             await self.allocate_role(wolf, self.threads['werewolves'], 'werewolves')
         for user in users:
