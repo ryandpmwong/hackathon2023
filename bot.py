@@ -68,6 +68,8 @@ class WereWolfBot(commands.Bot):
         elif message.content == CLEAR_THREADS:
             for thread in message.channel.threads:
                 await thread.delete()
+
+        elif message.content == 
         
         # Just is happy to greet you
         elif message.content.lower() in GREETINGS:
