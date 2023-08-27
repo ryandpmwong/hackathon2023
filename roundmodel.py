@@ -33,31 +33,35 @@ class Round():
         self.threads = threads  # dict of for {'everyone' 'werewolves': Thread object}
         
         self.werewolf_options = self.construct_werewolf_options()
-        self.werewolf_votes = {k.user.id: None for (k, v) in players.items() if v == 'werewolf'}
+        self.werewolf_votes = {k.get_user(): None for k in players if k.get_side() == 'Bad'}
         self.ww_votes_message = None
         self.werewolf_timeup = False
 
         self.everyone_options = self.construct_everyone_options()
-        self.everyone_votes = {k.user.id: None for (k, v) in players.items()}
+        self.everyone_votes = {k.get_user(): None for k in players}
         self.everyone_votes_message = None
         self.everyone_timeup = False
+
+    def get_player(self, username):
+        '''Assumes there are no two players with the same username but i think thats a given anyway'''
+        for player in self.players:
+            if player.get_user().name == username:
+                return player
 
     def construct_werewolf_options(self) -> list:
         options = []
         for player in self.players:
-            try:
-                if self.players[player][1] != 'werewolf':
-                    user = self.players[player][0]
-                    options.append(discord.SelectOption(label=user.name, description='Vote to kill ' + user.name))
-            except:
-                print(f'User with ID {player} not found?')
+            if player.get_side() != 'Bad' and player.is_alive():
+                user = player.get_user()
+                options.append(discord.SelectOption(label=user.name, description='Vote to kill ' + user.name))
         return options
 
     async def print_current_ww_votes(self, channel, votes):
         cv_message = "Current votes:"
         for voter in votes:
             if votes[voter] is not None:
-                cv_message += f"\n{self.players[voter][0].name} voted for: {votes[voter]}"
+                # idk man
+                cv_message += f"\n{voter.name} voted for: {votes[voter]}"
         if self.ww_votes_message is None:
             self.ww_votes_message = await channel.send(cv_message)
         else:
@@ -71,7 +75,7 @@ class Round():
                 filtered_list = list(filter(lambda x: x is not None, voted_players))
                 if len(filtered_list) == 0:
                     #no one voted for a thingo
-                    return random.choice([x for x in self.players if self.players[x] != 'werewolf'])
+                    return random.choice([x for x in self.players if player.get_side() != 'Bad' and player.is_alive()])
                 else:
                     return random.choice(list(set(filtered_list)))
         return voted_players[0]
@@ -85,7 +89,7 @@ class Round():
         
         async def werewolf_callback(interaction):
             if not self.werewolf_timeup:
-                self.werewolf_votes[interaction.user.id] = select.values[0]
+                self.werewolf_votes[interaction.user] = select.values[0]
                 await self.print_current_ww_votes(self.threads['werewolves'],
                                                self.werewolf_votes)
                 await interaction.response.defer()
@@ -104,7 +108,7 @@ class Round():
         options = []
         try:
             for player in self.players:
-                user = self.players[player][0]
+                user = player.get_user()
                 options.append(discord.SelectOption(label=user.name, description='Vote to eliminate ' + user.name))
         except:
             print(f'User with ID {player} not found?')
@@ -114,7 +118,7 @@ class Round():
         cv_message = "Current votes:"
         for voter in votes:
             if votes[voter] is not None:
-                cv_message += f"\n{self.players[voter][0].name} voted for: {votes[voter]}"
+                cv_message += f"\n{voter.name} voted for: {votes[voter]}"
         if self.everyone_votes_message is None:
             self.everyone_votes_message = await channel.send(cv_message)
         else:
@@ -199,6 +203,9 @@ class Round():
             await all_thread.send("You have chosen to skip elimination this round.")
         else:
             await all_thread.send(f"You have chosen to eliminate: {self.voted}")
+
+    def game_result(self):
+        return 'Werewolves win'
 
     async def timer(ctx, seconds):
         time = int(seconds)
