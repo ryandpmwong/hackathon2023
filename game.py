@@ -141,11 +141,13 @@ class WerewolfGame:
         new_round = Round(self.players, self.threads)
         print('start new round')
         await new_round.run_night()
-        print('night')
         while new_round.get_game_result() is None:
-            new_round = Round(self.players, self.threads)
             await new_round.run_night()
-        return new_round.get_game_result()
+        print('night')
+        # while new_round.get_game_result() is None:
+        #     new_round = Round(self.players, self.threads)
+        #     await new_round.run_night()
+        # return new_round.get_game_result()
 
 
 

@@ -42,6 +42,8 @@ class WereWolfBot(commands.Bot):
 
         if message.channel.name == 'testing' and not message.author.bot:
             # If the channel's name is testing and the author is not a bot:
+            # await message.channel.send(f"{message.author} has send a message: {message.content}")
+            await self.handle_responses(message)
             #await message.channel.send(f"{message.author} has send a message: {message.content}")
             #await self.handle_responses(message)
             insult = f"The *better* were-bot: {message.author} sent '"
@@ -59,7 +61,7 @@ class WereWolfBot(commands.Bot):
                     insult = insult + new_word + "'"
                 else:
                     insult = insult + new_word + " "
-                    
+
             await message.channel.send(insult)
 
 
@@ -73,9 +75,9 @@ class WereWolfBot(commands.Bot):
         if message.content == MAKE_THREADS:
             # It makes a new game, importing from game.py, giving the channel and who wrote the message
             users = []
-            for name in message.guild.members:
-                if name.bot == False:
-                    users.append(name)
+            for user in message.guild.members:
+                if not user.bot:
+                    users.append(user)
             new_game = game.WerewolfGame(message.channel, users)
             print('made new game')
             # Creates new threads
@@ -93,8 +95,8 @@ class WereWolfBot(commands.Bot):
                 await thread.delete()
 
         elif message.content == "List names":
-            for name in message.guild.members:
-                await message.channel.send(name)
+            for user in message.guild.members:
+                await message.channel.send(user.name)
             await message.channel.send("All names given")
         
         # Just is happy to greet you
