@@ -9,8 +9,8 @@ import game
 # This code is for testing purposes and is not functional.
 
 class Play(commands.Cog):
-    def __init__(self, bot: commands.Bot):
-        self.bot = bot
+    def __init__(self, the_bot: bot.WereWolfBot):
+        self.bot = the_bot
 
     @app_commands.command(name="clear_threads")
     async def clear_threads(self, interaction: discord.Interaction):
@@ -40,7 +40,10 @@ class Play(commands.Cog):
     async def check_status(self, interaction: discord.Interaction):
         for member in interaction.channel.members:
             if member.status == discord.Status.online:
-                await interaction.channel.send(f"{member.name} is online")
+                a = await self.bot.get_context(interaction)
+                await a.send(f"{member.name} is online")
+
+
 
 async def setup(bot: bot.WereWolfBot):
     await bot.add_cog(Play(bot))
