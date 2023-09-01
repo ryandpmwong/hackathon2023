@@ -172,7 +172,7 @@ class WerewolfGame:
         result = await self.vote(votable,
                                  'everyone')
         await self.threads['everyone'].send(f"It seems that you have chosen to eliminate {result}. Farewell, {result}.")
-        self.threads['ghost'].send(f'@{result} you were eliminated. This is the ghost space.')
+        await self.threads['ghost'].send(f'@{result} you were eliminated. This is the ghost space.')
         for a in self.alive:
             if a.name == result:
                 self.alive.pop(a)
