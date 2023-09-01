@@ -139,18 +139,44 @@ class WerewolfGame:
             await new_round.run_night()
         print('night')
 
+    async def is_game_over(self):
+        villager = len([user for user in self.users if user in self.alive and user not in self.werewolves])
+        werewolves = len([werewolf for werewolf in self.werewolves if werewolf in self.alive])
+        if werewolves >= villager:
+            await self.threads['everyone'].send("AHHH werewolf killed eveyrone!")
+            await self.channel.send("Game over. Wolves rules.")
+            return True, 'Werewolf'
+        elif werewolves == 0:
+            await self.threads['everyone'].send("All werewolves are killed. YAHHHH")
+            return True, 'Villager'
+        else:
+            await self.threads['everyone'].send("Nonthind happend")
+            return False, None
 
     async def night(self):
-        await self.threads['werewolves'].send("It is night time. Discuss whom you shalt kill. No time to discuss")
-        await timer(self.threads['werewolves'], 5)
+        await self.threads['werewolves'].send("It is night time. Discuss whom you shalt kill.")
+        await timer(self.threads['werewolves'], 10)
         result = await self.vote([user for user in self.users if user not in self.werewolves and self.alive[user]],
                                  'werewolves')
         await self.threads['everyone'].send(f"{result} was killed last night. How horrible! Who would've done it?")
-        self.threads['ghost'].send(f'@{result} you were killed. This is the ghost space')
+        await self.threads['ghost'].send(f'@{result} you were killed. This is the ghost space.')
+        for a in self.alive:
+            if a.name == result:
+                self.alive.pop(a)
+                return
 
     async def day(self):
-        # if self.alive[user]
-        pass
+        await self.threads['everyone'].send("It is day time. Discuss who might've been the werewolf.")
+        votable = [user for user in self.users if self.alive[user]]
+        await timer(self.threads['everyone'], 15)
+        result = await self.vote(votable,
+                                 'everyone')
+        await self.threads['everyone'].send(f"It seems that you have chosen to eliminate {result}. Farewell, {result}.")
+        self.threads['ghost'].send(f'@{result} you were eliminated. This is the ghost space.')
+        for a in self.alive:
+            if a.name == result:
+                self.alive.pop(a)
+                return
 
     async def vote(self, users: list[discord.User], side: str):
         """
