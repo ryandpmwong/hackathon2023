@@ -43,8 +43,8 @@ class test_threads:
 
         # testing, adding myself
         discord_handle = self.author
-        await self.all_players_thread.add_user(discord_handle)
-        await self.werewolves_thread.add_user(discord_handle)
+        await self.all_players_thread.add_role(discord_handle)
+        await self.werewolves_thread.add_role(discord_handle)
 
         return [self.all_players_thread, self.werewolves_thread, self.dead_thread]
 

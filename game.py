@@ -18,19 +18,20 @@ Inform me on discord when modifying this file OR DDIIIIIE
 
 WELCOME_MESSAGE = "Welcome to WereWolf!"
 
-#dummy list of players
+# dummy list of players
 dummy_players = ["player1", "player2", "player3", "player4"]
+
 
 class WerewolfGame:
     ID = 0
     GAMES = {}
 
-    def __init__(self, channel, users, werewolves_num = None):
+    def __init__(self, channel, users, werewolves_num=None):
         """
         :param channel: the channel the game belongs in
         :param players: list of users
         """
-        
+
         if werewolves_num is not None:
             self.werewolf_num = werewolves_num
         else:
@@ -48,7 +49,6 @@ class WerewolfGame:
         self.is_day = True
         # self.round = Round(self.players)
 
-
     async def create_game_threads(self):
         """
         Create game threads for werewolf, ghost and villagers
@@ -60,8 +60,8 @@ class WerewolfGame:
         game_id = f"Game {self.ID}: "
         # create villager thread
         everyone = await self.channel.create_thread(name=game_id + "Village Talk",
-                                                     type=discord.ChannelType.private_thread,
-                                                     invitable=False)
+                                                    type=discord.ChannelType.private_thread,
+                                                    invitable=False)
         self.threads['everyone'] = everyone
         werewolf = await self.channel.create_thread(name=game_id + "Werewolf Chat",
                                                     type=discord.ChannelType.private_thread,
@@ -74,6 +74,8 @@ class WerewolfGame:
                                                  type=discord.ChannelType.private_thread,
                                                  invitable=False)
         self.threads['ghost'] = ghost
+
+        return self.threads
 
     async def generate_players(self, users: list[discord.User]):
         """
@@ -92,7 +94,6 @@ class WerewolfGame:
         print(self.players, 'from game.py')
         return
 
-
     async def get_threads(self):
         return self.threads.values()
 
@@ -105,14 +106,12 @@ class WerewolfGame:
         :return:
         """
         if player_type is None:
-            self.threads['everyone'].add_user(user)
+            self.threads['everyone'].add_role(user)
         if player_type == 'villager':
             self.players.append(model.Villager(user))
         elif player_type == 'werewolf':
             self.players.append(model.Werewolf(user))
         await thread.add_user(user)
-
-
 
     async def deallocate_role(self, user, thread: discord.Thread):
         await thread.remove_user(user)
@@ -148,6 +147,3 @@ class WerewolfGame:
         #     new_round = Round(self.players, self.threads)
         #     await new_round.run_night()
         # return new_round.get_game_result()
-
-
-

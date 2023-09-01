@@ -10,6 +10,8 @@ from bot import WereWolfBot
 load_dotenv()
 TOKEN = os.environ.get('DISCORD_TOKEN')
 
+
+
 description = "I am an amazing bot, YES."
 
 
