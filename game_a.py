@@ -54,6 +54,7 @@ class WerewolfGame:
         self.is_day = False
         self.werewolves = []
 
+
     async def create_game_threads(self):
         """
         Create game threads for werewolf, ghost and villagers
@@ -89,10 +90,13 @@ class WerewolfGame:
         Should only be called once when the game has started.
         :return: None
         """
-        await self.threads['everyone'].send("Welcome to the game! The game will start in 15 seconds.")
-        await timer(self.threads["everyone"], 15)
         if self.werewolf_num <= 0:
             await self.channel.send('not enough wolves')
+        elif 2*self.werewolf_num > self.villager_num:
+            await self.channel.send("too much wolves!")
+            await self.delete()
+        await self.threads['everyone'].send("Welcome to the game! The game will start in 15 seconds.")
+        await timer(self.threads["everyone"], 15)
         self.werewolves = sample(self.users, self.werewolf_num)
         for user in self.werewolves:
             await self.threads['werewolves'].add_user(user)
@@ -135,9 +139,10 @@ class WerewolfGame:
             await new_round.run_night()
 
     async def is_game_over(self):
-        villager = len([user for user in self.users if user in self.alive and user not in self.werewolves])
-        werewolves = len([werewolf for werewolf in self.werewolves if werewolf in self.alive])
-        if werewolves >= villager:
+        villagers = len([user for user in self.users if self.alive[user] and user not in self.werewolves])
+        werewolves = len([werewolf for werewolf in self.werewolves if self.alive[werewolf]])
+        print("villagers left: ", villagers, "\twerewolves left: ", werewolves)
+        if werewolves >= villagers:
             # await self.threads['everyone'].send("AHHH werewolf killed everyone!")
             # await self.channel.send("Game over. Wolves rules.")
             return 'Werewolf'
@@ -148,6 +153,7 @@ class WerewolfGame:
             return False
 
     async def night(self):
+        await self.threads['everyone'].send("It is now night time, werewolves roams...")
         await self.threads['werewolves'].send("It is night time. Discuss whom you shalt kill.")
         await timer(self.threads['werewolves'], 30)
         result = await self.vote([user for user in self.users if user not in self.werewolves and self.alive[user]],
@@ -157,7 +163,8 @@ class WerewolfGame:
         for a in self.alive:
             if a.name == result:
                 self.alive[a] = False
-                return
+            # elif a.status == discord.Status.offline:
+            #     self.alive[a] = False
         return None
 
     async def day(self):
@@ -168,10 +175,13 @@ class WerewolfGame:
                                  'everyone')
         await self.threads['everyone'].send(f"It seems that you have chosen to eliminate {result}. Farewell, {result}.")
         await self.threads['ghost'].send(f'@{result} you were eliminated. This is the ghost space.')
-        for a in self.alive:
+        for a in self.alive.keys():
             if a.name == result:
                 self.alive[a] = False
-                return
+                await self.threads['werewolves'].remove_user(a)
+                await self.threads['everyone'].send(f'A wolf is killed. '
+                                                    f'{len(list(wolf for wolf in self.werewolves if self.alive[wolf]))}'
+                                                    f' wolves left')
         return None
 
     async def vote(self, users: list[discord.User], side: str):
@@ -198,12 +208,9 @@ class WerewolfGame:
 
         select.callback = callback
         view = View().add_item(select)
-        print('send view')
         # await self.threads[side].send("Vote for a player to kill")
         await self.threads[side].send("Vote for a player to kill", view=view)
-        print('sent')
         time_up = await timer(self.threads[side], 10)
-        print(current_votes)
         votes = list(current_votes.values())
         if len(votes) == 0:
             await self.threads[side].send("Nobody was chosen. Round skipped.")
