@@ -30,19 +30,18 @@ class Play(commands.Cog):
             if name.bot is False and name.status == discord.Status.online:
                 users.append(name)
         new_game = game_a.WerewolfGame(interaction.channel, users)
-        # Creates new threads
-        # so if we did something like    threads = await new_game.create_game_threads()
-        # then the variable "threads" can be passed back to GameModel???
         await new_game.create_game_threads()
         for user in users:
             await new_game.join_game(user)
         await new_game.select_werewolves()
-        game_over = False, None
-        while not game_over[0]:
-            print('fsalfjksfsdf')
-            await new_game.night()
-            await new_game.day()
-            game_over = new_game.is_game_over()
+        while await new_game.is_game_over() is False:
+            if new_game.is_day:
+                await new_game.day()
+            else:
+                await new_game.night()
+            new_game.is_day = not new_game.is_day
+        await interaction.channel.send(f"Game{new_game.ID} is over. {await new_game.is_game_over()} had won.")
+        await new_game.delete()
 
 
     @app_commands.command(name="check_status")

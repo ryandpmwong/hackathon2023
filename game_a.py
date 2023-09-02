@@ -51,8 +51,7 @@ class WerewolfGame:
         self.ID = WerewolfGame.ID
         WerewolfGame.ID += 1
         self.threads = {}
-        self.day = 0
-        self.is_day = True
+        self.is_day = False
         self.werewolves = []
 
     async def create_game_threads(self):
@@ -117,41 +116,34 @@ class WerewolfGame:
 
     async def delete(self):
         for thread in self.threads.values():  # need to be modified
+            await thread.send('All threads should be deleted after 10 seconds.')
+        await asyncio.sleep(10)
+        for thread in self.threads.values():  # need to be modified
             await thread.delete()
         self.__del__()
 
     def __del__(self):
         del self
 
-    def refresh_status(self):
-        if self.is_day:
-            pass
-
-    '''async def werewolf_round(self):
-        for user in self.threads[1]:
-            await self.allocate_role(user, list(self.threads.keys())[1], 'werewolf')
-        # vote'''
 
     async def run_game(self):
         new_round = Round(self.players.keys(), self.threads)
         await new_round.run_night()
         while new_round.get_game_result() is None:
             await new_round.run_night()
-        print('night')
 
     async def is_game_over(self):
         villager = len([user for user in self.users if user in self.alive and user not in self.werewolves])
         werewolves = len([werewolf for werewolf in self.werewolves if werewolf in self.alive])
         if werewolves >= villager:
-            await self.threads['everyone'].send("AHHH werewolf killed eveyrone!")
-            await self.channel.send("Game over. Wolves rules.")
-            return True, 'Werewolf'
+            # await self.threads['everyone'].send("AHHH werewolf killed everyone!")
+            # await self.channel.send("Game over. Wolves rules.")
+            return 'Werewolf'
         elif werewolves == 0:
-            await self.threads['everyone'].send("All werewolves are killed. YAHHHH")
-            return True, 'Villager'
+            # await self.threads['everyone'].send("All werewolves are killed. YAHHHH")
+            return 'Villager'
         else:
-            await self.threads['everyone'].send("Nonthind happend")
-            return False, None
+            return False
 
     async def night(self):
         await self.threads['werewolves'].send("It is night time. Discuss whom you shalt kill.")
@@ -221,7 +213,6 @@ class WerewolfGame:
                 if times > max_vote:
                     max_vote = times
                     selected = vote
-            print(selected)
             return selected
 
 
