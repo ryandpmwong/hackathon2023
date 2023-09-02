@@ -6,7 +6,8 @@ from discord.ext import commands
 import bot
 import game_a
 
-# This code is for testing purposes and is not functional.
+# This code is now functional
+
 
 class Play(commands.Cog):
     def __init__(self, the_bot: bot.WereWolfBot):
@@ -27,7 +28,7 @@ class Play(commands.Cog):
         context = await self.bot.get_context(interaction)
         await context.send("Starting a new werewolf game")
         for name in interaction.channel.members:
-            if name.bot is False and name.status == discord.Status.online:
+            if name.bot is False and name.status != discord.Status.offline:
                 users.append(name)
         new_game = game_a.WerewolfGame(interaction.channel, users)
         await new_game.create_game_threads()
@@ -35,11 +36,14 @@ class Play(commands.Cog):
             await new_game.join_game(user)
         await new_game.select_werewolves()
         while await new_game.is_game_over() is False:
+            print(await new_game.is_game_over())
             if new_game.is_day:
+                print("Day")
                 await new_game.day()
             else:
                 await new_game.night()
             new_game.is_day = not new_game.is_day
+            print(new_game.is_day)
         await interaction.channel.send(f"Game{new_game.ID} is over. {await new_game.is_game_over()} had won.")
         await new_game.delete()
 
@@ -50,7 +54,6 @@ class Play(commands.Cog):
         await a.send("Checking member status...")
         for member in interaction.channel.members:
             status = member.status
-
             await interaction.channel.send(f'{member} is {status}')
 
 

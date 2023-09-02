@@ -89,6 +89,8 @@ class WerewolfGame:
         Should only be called once when the game has started.
         :return: None
         """
+        await self.threads['everyone'].send("Welcome to the game! The game will start in 15 seconds.")
+        await timer(self.threads["everyone"], 15)
         if self.werewolf_num <= 0:
             await self.channel.send('not enough wolves')
         self.werewolves = sample(self.users, self.werewolf_num)
@@ -147,28 +149,30 @@ class WerewolfGame:
 
     async def night(self):
         await self.threads['werewolves'].send("It is night time. Discuss whom you shalt kill.")
-        await timer(self.threads['werewolves'], 10)
+        await timer(self.threads['werewolves'], 30)
         result = await self.vote([user for user in self.users if user not in self.werewolves and self.alive[user]],
                                  'werewolves')
         await self.threads['everyone'].send(f"{result} was killed last night. How horrible! Who would've done it?")
         await self.threads['ghost'].send(f'@{result} you were killed. This is the ghost space.')
         for a in self.alive:
             if a.name == result:
-                self.alive.pop(a)
+                self.alive[a] = False
                 return
+        return None
 
     async def day(self):
         await self.threads['everyone'].send("It is day time. Discuss who might've been the werewolf.")
         votable = [user for user in self.users if self.alive[user]]
-        await timer(self.threads['everyone'], 15)
+        await timer(self.threads['everyone'], 30)
         result = await self.vote(votable,
                                  'everyone')
         await self.threads['everyone'].send(f"It seems that you have chosen to eliminate {result}. Farewell, {result}.")
         await self.threads['ghost'].send(f'@{result} you were eliminated. This is the ghost space.')
         for a in self.alive:
             if a.name == result:
-                self.alive.pop(a)
+                self.alive[a] = False
                 return
+        return None
 
     async def vote(self, users: list[discord.User], side: str):
         """
@@ -198,7 +202,7 @@ class WerewolfGame:
         # await self.threads[side].send("Vote for a player to kill")
         await self.threads[side].send("Vote for a player to kill", view=view)
         print('sent')
-        time_up = await timer(self.threads[side], 5)
+        time_up = await timer(self.threads[side], 10)
         print(current_votes)
         votes = list(current_votes.values())
         if len(votes) == 0:
