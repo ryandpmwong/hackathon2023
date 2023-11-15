@@ -1,15 +1,19 @@
+from __future__ import annotations
+from typing import Optional, Union
 import collections.abc
+from collections import abc
 
 import discord
-import model
-from roundmodel import Round
+from discord.ext import commands
+from discord.ui import Select, View
+
 import asyncio
-from collections import abc
 import random
 from random import sample
 import math
-from discord.ext import commands
-from discord.ui import Select, View
+
+import model
+from roundmodel import Round
 
 """
 Inform me on discord when modifying this file OR DDIIIIIE
@@ -23,10 +27,13 @@ dummy_players = ["player1", "player2", "player3", "player4"]
 
 
 class WerewolfGame:
-    ID = 0
+    ID = 1
     GAMES = {}
 
-    def __init__(self, channel, users, werewolves_num=None):
+    def __init__(self, 
+                 channel: Union[abc.GuildChannel, abc.PrivateChannel], 
+                 users: list[Union[discord.User, discord.Member]], 
+                 werewolves_num=None):
         """
         :param channel: the channel the game belongs in
         :param players: list of users
@@ -39,7 +46,6 @@ class WerewolfGame:
         self.villager_num = len(users) - self.werewolf_num
         self.channel = channel
         self.users = users
-        self.players = []
 
         self.players = []  # will be a list of player objects (probably)
         self.ID = WerewolfGame.ID
@@ -77,15 +83,15 @@ class WerewolfGame:
 
         return self.threads
 
-    async def generate_players(self, users: list[discord.User]):
+    async def generate_players(self) -> None:
         """
         generate players and allocate them into correct threads
         :param users: discord.User, users who have joined the game.
         :return: None
         """
-        werewolves = sample(users, self.werewolf_num)
-        print(werewolves, 'were')
-        for user in users:
+        werewolves = sample(self.users, self.werewolf_num)
+        print(werewolves, ' chosen as Werewolf')
+        for user in self.users:
             if user in werewolves:
                 await self.allocate_role(user, self.threads['werewolves'], 'werewolves')
                 await self.allocate_role(user, self.threads['everyone'], None)
@@ -107,11 +113,15 @@ class WerewolfGame:
         """
         if player_type is None:
             self.threads['everyone'].add_role(user)
+
         if player_type == 'villager':
             self.players.append(model.Villager(user))
+
         elif player_type == 'werewolf':
             self.players.append(model.Werewolf(user))
+
         await thread.add_user(user)
+        print(self.players)
 
     async def deallocate_role(self, user, thread: discord.Thread):
         await thread.remove_user(user)

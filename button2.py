@@ -42,7 +42,7 @@ class MakeButtons(View):
 
         @discord.ui.button(label="Join Game", style=discord.ButtonStyle.blurple)
         async def join_game(interaction, button: Button):
-            await interaction.response.send_message(f"{bot.get_user(interaction)} just join")
+            await interaction.response.send_message(f"{bot.get_user(interaction)} just joined.")
             self.players_joined += 1
             if self.num_players == self.players_joined:
                 button.disabled = True

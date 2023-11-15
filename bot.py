@@ -13,7 +13,8 @@ import model
 import game
 
 MAKE_THREADS = "Make me some threads"
-CLEAR_THREADS = "Clear all threads"
+# CLEAR_THREADS = "Clear all threads"
+CLEAR_THREADS = "/cthreads"
 GREETINGS = "hi hello good evening good morning good night greeting welcome"
 DISCORD_GUILD = "Hackathon 2023"
 
@@ -32,22 +33,30 @@ class WereWolfBot(commands.Bot):
 
     async def on_ready(self):
         print(f"{self.user} is ready and on the roll")
-        await self.tree.sync()
-        print('Synced tree')
+        # Comment out later, otherwise dies
+        # await self.tree.sync(guild=None)
+        # print('Synced tree')
+
 
     async def on_message(self, message):
+        """Sends a mocking message to you if you comment in a channel named 'testing'.
+        Ignores bots.
+
+        Args:
+            message: message sent in channel
+        """
         # If the author is a bot, do not do anything
         if message.author.bot:
             return
 
         if message.channel.name == 'testing' and not message.author.bot:
-            # If the channel's name is testing and the author is not a bot:
-            # await message.channel.send(f"{message.author} has send a message: {message.content}")
+            # Allows you to make threads
             await self.handle_responses(message)
+
+            # Rest is decorative (not useful for game)
             #await message.channel.send(f"{message.author} has send a message: {message.content}")
-            #await self.handle_responses(message)
             insult = f"The *better* were-bot: {message.author} sent '"
-            # insert inefficient code here
+            # inefficient insult generator code
             words_sent = (message.content).split(" ")
             for word in words_sent:
                 new_word = ""
@@ -63,8 +72,6 @@ class WereWolfBot(commands.Bot):
                     insult = insult + new_word + " "
 
             await message.channel.send(insult)
-
-
 
 
     async def handle_responses(self, message):
@@ -87,10 +94,15 @@ class WereWolfBot(commands.Bot):
             await new_game.generate_players(users)
             await message.channel.send(await new_game.run_game())
 
+        elif message.content == "/sync please":
+            await self.tree.sync()
+            await message.channel.send("Tree synced? Maybe? ;_;")
+
         # Thread clearing (clears all the threads in a channel)
         elif message.content == CLEAR_THREADS:
             for thread in message.channel.threads:
                 await thread.delete()
+            await message.channel.send("The threads be gone")
 
         elif message.content == "List names":
             for user in message.guild.members:
@@ -114,8 +126,6 @@ class WereWolfBot(commands.Bot):
                     await self.game_dict.get(game_id).delete()
                 except AttributeError:
                     await message.channel.send("This game has already been deleted or hadn't been created")
-
-
 
 
     async def on_message_edit(self, before, after):

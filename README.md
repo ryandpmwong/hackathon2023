@@ -55,6 +55,18 @@ The game continues until enough player have died so either werewolves have equal
 
 To actually run Were-bot, use the main-test file.
 
+Order of operations:
+main-test.py {
+    -> creates a WereBot instance from bot.py {
+
+    }
+    -> Creates slash command cogs
+    button.py {
+        -> Creates commands (/start_game) to initate game view
+        -> Once all players have been filled, it will allow you to start the game
+    } -> Initiates game_a.WerewolfGame instance
+}
+
 
 ##
 we have attempted at making /commands for quick access and make join game buttons, but the buttons won't work and we ran out of time.

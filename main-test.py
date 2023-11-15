@@ -2,6 +2,7 @@ import asyncio
 import logging
 import os
 from dotenv import load_dotenv
+import random
 
 import discord
 
@@ -19,14 +20,24 @@ async def main():
     intents = discord.Intents.all()
     client = discord.Client(intents=intents)
 
+    activities = [
+        discord.Game(name="with my food"),
+        discord.Activity(type=discord.ActivityType.listening, name="the screams of my victims"),
+        discord.Activity(type=discord.ActivityType.watching, name="yet another execution"),
+        discord.Activity(type=discord.ActivityType.watching, name="the wrong people die"),
+        discord.Game(name="Werewolf, I wish.")
+    ]
+
     bot = WereWolfBot(
         command_prefix="/",
         description=description,
-        intents=intents
+        intents=intents,
+        activity=activities[random.randint(0, len(activities)-1)]
     )
     cogs = [
         'startgame',
-        'play'
+        'play',
+        'button'
     ]
 
     for cog in cogs:

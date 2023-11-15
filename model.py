@@ -62,7 +62,7 @@ class Player:
         return self.user
 
     def get_user_name(self):
-        return self.user.name
+        return self.user.display_name
 
     def get_side(self):
         return None  # might modify later: eg. by default return good
@@ -75,6 +75,14 @@ class Player:
 
     def kill(self):
         self.alive = False
+
+    def __repr__(self) -> str:
+        return (self.get_user_name()+", "+
+                self.get_role()+
+                ": (Side: "+self.get_side()+", Status: "+self.is_alive()+")")
+    
+    def __str__(self) -> str:
+        return self.__repr__()
 
 
 class Werewolf(Player):
