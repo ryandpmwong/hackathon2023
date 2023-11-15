@@ -2,6 +2,3 @@
 test_amy.py
 .venv
 __pycache__
-.gitignore
-__pycache__/button.cpython-311.pyc
-.gitignore

@@ -2,7 +2,7 @@
 
 You think this is functional? You think it will be functional by the end of this Hackathon?? Think Again! :D
 
-# Were-bot, or Where-bot????? (v0.0.5, Hackathon variant)
+# Were-bot, or Where-bot????? (v0.0.6)
 
 You have stumbled upon a project made by a group of first-years in UQ, and they are terrible at debugging and cooperating. 
 
@@ -77,7 +77,7 @@ We may attempt to implement it in UQ CS bot in the future (Once we get rid of al
 Who knows if we'll ever actually do these, but I'd like to think we will.
 
 ### Bugs
-* Werewolves currently unable to be voted off by villagers (we're giving those sussy Werewolves a chance). **Status:** unfixed
+* Werewolves currently unable to be voted off by villagers (we're giving those sussy Werewolves a chance). **Status:** fixed
 
 ### Functionality
 * Enable multiple rounds of a game. **Status:** unfinished
@@ -88,11 +88,11 @@ Who knows if we'll ever actually do these, but I'd like to think we will.
 
 * Create a channel or thread in which dead players can speak in and see (but no living players can). **Status:** unfinished/not implemented
 
-* Delete game threads and declare a win message after the game is won. **Status:** unfinished
+* Delete game threads and declare a win message after the game is won. **Status:** somewhat implemented but actually getting to a game win is buggy
 
-* Give a summary of the game's events in said win message. **Status:** unfinished
+* Give a summary of the game's events in said win message. **Status:** unfinished like the lore of a lost epic (i.e. documentation)
 
-* Add game initialisation messages (e.g. Welcome @[username] and @[username], you are this game's Werewolves! Pretend to be a villager by day and try not to be voted out for being too suspicious. Vote to kill someone now :) ). **Status:** unimplemented
+* Add game initialisation messages (e.g. Welcome @[username] and @[username], you are this game's Werewolves! Pretend to be a villager by day and try not to be voted out for being too suspicious. Vote to kill someone now :) ). **Status:** incomplete, partially implemented
 
 * Prevent Werewolves from speaking to each other in the Werewolf thread when Day is active (need to communicate with group on whether this is the desired functionality). **Status:** not implemented
 
@@ -102,15 +102,15 @@ Who knows if we'll ever actually do these, but I'd like to think we will.
 
 
 ### Menus/Interaction
-* Create a button start menu that updates (disabling said buttons comes later) and can start the game, as well as cancel the game. **Status:** unfinished
+* Create a button start menu that updates (disabling said buttons comes later) and can start the game, as well as cancel the game. **Status:** everything but cancel implemented! (You're part of this game whether you like it or not)
 
-* Slash Commands show up in list properly and actually run, with descriptions given etc. **Status:** unfinished like the lore of a lost epic (i.e. documentation)
+* Slash Commands show up in list properly and actually run, with descriptions given etc. **Status:** technically done
 
-* Disable/enable said buttons mentioned earlier when the number of players has been met. **Status:** unfinished
+* Disable/enable said buttons mentioned earlier when the number of players has been met. **Status:** Done!
 
-* Add support for specifying number of werewolves in a game in play command. **Status:** unfinished
+* Add support for specifying number of werewolves in a game in play command. **Status:** not exactly implemented. The game won't run without specifying werewolf numbers, but the functionality is there to allow this to be omitted
 
-* Allow nickname _and_ username support. **Status:** not implemented, it's not much anyway
+* Allow nickname _and_ username support. **Status:** getting there
 
 * Pin messages by Were-bot. **Status:** not implemented, not really a priority
 
@@ -124,11 +124,14 @@ Who knows if we'll ever actually do these, but I'd like to think we will.
 
 * Image representation of living and dead players. **Status:** unimplemented
 
-* Inclusion of more roles. **Status:** Unimplemented and will be unimplemented until we get a game running with base roles, I'd think
+* Inclusion of more roles. **Status:** Unimplemented and will be unimplemented until we get a game running with two roles, I'd think
 
 * Tell an AI how you want to kill somebody. **Status:** unimplemented like the safety function of a washing machine while you're inside of it
 
 
-# Version history (a singular entry)
+# Version history (--a singular entry-- Has two now)
 ## v0.0.5
 Created after slaving away for two days at hackathon. Creates new threads for a game, allows for werewolf votes, player discussion, and villager votes (but only for one round), and contains some bugs for good measure.
+
+## v0.0.6
+You can start a game from a button View now by running /start_game! It'll also correctly run more than run round maybe, and sometimes accounts for winning conditions, but it hasn't been tested to check whether it works completely. There may be bugs where it just... stops. You'll also get a DM telling you what role you are.
