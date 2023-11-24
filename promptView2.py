@@ -8,6 +8,7 @@ import os
 
 # promptView2.py
 # Intended to merge with other files, kept in case new files become buggy so rollback of changes can occur.
+# STILL UNMERGED! Role-wise, that is (/create_roles, /delete_roles)
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')

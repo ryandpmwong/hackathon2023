@@ -10,7 +10,7 @@ import os
 
 from bot import WereWolfBot
 # from button import MakeButtons
-from button2 import MakeButtons
+from Unused.button2 import MakeButtons
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -18,6 +18,8 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 intents = discord.Intents.all()
 client = discord.Client(intents=intents)
 tree = discord.app_commands.CommandTree(client)
+
+# Not used really
 
 
 class StartGame(commands.Cog):
@@ -34,7 +36,7 @@ class StartGame(commands.Cog):
     )
     async def new_game(self, interaction: discord.Interaction, num_players: str, num_werewolves: str|None):
         context = await self.bot.get_context(interaction)
-        await context.send(f"Trying to players {num_players} werewolves {num_werewolves}...")
+        await context.send(f"Trying to players {num_players} werewolves {num_werewolves}...\nI don't work, use /start_game instead.")
 
         # self.view = MakeButtons(int(num_players), int(num_werewolves), self.bot)
         # await context.send("A new game is started")
